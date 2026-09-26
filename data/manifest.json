@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "documents": [
+    {
+      "doc_id": "shared_loaner_return",
+      "title": "Loaner vehicle return check-in",
+      "path": "loaner-return.md",
+      "visibility": "shared",
+      "version": "1.0"
+    },
+    {
+      "doc_id": "manager_goodwill_review",
+      "title": "Manager goodwill review",
+      "path": "goodwill-review.md",
+      "visibility": "manager_only",
+      "version": "1.0"
+    }
+  ]
+}

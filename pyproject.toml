@@ -1,0 +1,53 @@
+[build-system]
+requires = ["hatchling==1.32.4"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dealer-evidence-agent"
+version = "0.1.0.dev0"
+description = "A bounded dealership policy and recall evidence agent (M0 scaffold)."
+readme = "README.md"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "httpx==0.28.1",
+    "langgraph==1.2.12",
+    "openai==3.19.2",
+    "rank-bm25==0.2.2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest==9.1.1", "ruff==0.16.9"]
+
+[dependency-groups]
+dev = ["pytest==9.1.1", "ruff==0.16.9"]
+
+[project.scripts]
+dealer-evidence = "dealer_evidence_agent.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dealer_evidence_agent"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/tests",
+    "/data",
+    "/docs",
+    "/README.md",
+    "/pyproject.toml",
+    "/.env.example",
+    "/.python-version",
+    "/requirements.lock",
+    "/uv.lock",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]

@@ -1,0 +1,31 @@
+# Credentials: keep the explicitly safe template.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local runtimes, environments, and generated files.
+.tools/
+.venv/
+.uv-cache/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+runs/
+.vscode/
+.idea/
+
+# Private planning/career documents are not application deliverables.
+portfolio-project-assessment.md
+portfolio-project-plan.md
+pitstop-development-plan.md
+what-i-learned-building-140-production-ai-agents.md
+uofm-ai-project-recommendation.md
+linkedin-recommendations-*.md
