@@ -1,19 +1,198 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "documents": [
     {
       "doc_id": "shared_loaner_return",
       "title": "Loaner vehicle return check-in",
       "path": "loaner-return.md",
       "visibility": "shared",
-      "version": "1.0"
+      "version": "1.0",
+      "sha256": "bceaa88f762fb0cf995a2ff4c521e13edca51d1ec6e47a72a64ee4a27dc18f33"
     },
     {
       "doc_id": "manager_goodwill_review",
       "title": "Manager goodwill review",
       "path": "goodwill-review.md",
       "visibility": "manager_only",
-      "version": "1.0"
+      "version": "1.0",
+      "sha256": "e77904c70973de2d15beafe2b76b48b05bb19405bec509f2dfce07b5e094212a"
+    },
+    {
+      "doc_id": "shared_appointment_intake",
+      "title": "Appointment intake",
+      "path": "appointment-intake.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "33b3da79df75f97deaacdbe3218b7aa5bfd0ed3c953348b49ac03b88c9b02fd8"
+    },
+    {
+      "doc_id": "shared_estimate_approval",
+      "title": "Estimate approval and scope changes",
+      "path": "estimate-approval.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "e98695d49f9cfdce416b678a29fbe0c2592e7d7fc585cd574bc9bf66d0e6ab27"
+    },
+    {
+      "doc_id": "shared_status_updates",
+      "title": "Customer status updates",
+      "path": "status-updates.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "23f654739b16702c4fa12f36c5cbf1d75fc0191b8c7f34eee40c1cbd3b2ce85d"
+    },
+    {
+      "doc_id": "shared_parts_backorder",
+      "title": "Parts backorder communication",
+      "path": "parts-backorder.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "db330ea6069c5dd9457192fdf03875b07ad14333fa04fbd8b143ca894d560d1b"
+    },
+    {
+      "doc_id": "shared_loaner_checkout",
+      "title": "Loaner checkout record",
+      "path": "loaner-checkout.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "c532a18149aca444393d8e3566d4b0df9f296d3ea4a55c9abffdc49291e7a976"
+    },
+    {
+      "doc_id": "shared_shuttle_booking",
+      "title": "Shuttle booking",
+      "path": "shuttle-booking.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "f3bd0725618a34d53f4534b12c945d018460eedc7ab798558b0a083895c6e15c"
+    },
+    {
+      "doc_id": "shared_after_hours_dropoff",
+      "title": "After-hours drop-off intake",
+      "path": "after-hours-dropoff.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "65ed2b9f8918fe7fa567eb3ccb4cac68743b0fc0e67f2345de688d75aa775ca3"
+    },
+    {
+      "doc_id": "shared_personal_property",
+      "title": "Personal property handling",
+      "path": "personal-property.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "14de3afd01ad618b1eda8477eab4cd917939a14c57736f62521afa99021ba247"
+    },
+    {
+      "doc_id": "shared_complaint_intake",
+      "title": "Complaint intake and escalation",
+      "path": "complaint-intake.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "48fdd87b93e121034a2463fb0e5899e0f9337fa887bafc0c7c67db6295ace0ab"
+    },
+    {
+      "doc_id": "shared_warranty_questions",
+      "title": "Warranty question intake",
+      "path": "warranty-questions.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "141fe683567beadc5f1fd60d4b0807efb633f542a469a0bec5c2b7753d5d0f7c"
+    },
+    {
+      "doc_id": "shared_recall_questions",
+      "title": "Recall question boundaries",
+      "path": "recall-questions.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "2565fc046ac4806deb0baabc2b71455168639e26e5406648b3f66b4ffb3b0966"
+    },
+    {
+      "doc_id": "shared_vehicle_pickup",
+      "title": "Vehicle pickup handoff",
+      "path": "vehicle-pickup.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "f96089f92e599302f06311a6109079b491fe93bbbe20c92fbb1d73eed2a37c1c"
+    },
+    {
+      "doc_id": "shared_record_corrections",
+      "title": "Repair-order record corrections",
+      "path": "record-corrections.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "7f02831b1a67520e9a874c323b5932c3a7721f5237e560f3e2924f5ddccdc1bc"
+    },
+    {
+      "doc_id": "shared_customer_contact",
+      "title": "Customer contact preferences",
+      "path": "customer-contact.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "a4204fad3076272e6ec4827d2c958ca282097e6721fc0c72b51b94db2f8a4535"
+    },
+    {
+      "doc_id": "shared_shift_handoff",
+      "title": "Open-job shift handoff",
+      "path": "shift-handoff.md",
+      "visibility": "shared",
+      "version": "1.0",
+      "sha256": "366dd90ad5f158f2a6339cbecd51bdb9102e65be13eabefc37e03e3f05a43e64"
+    },
+    {
+      "doc_id": "manager_refund_review",
+      "title": "Manager refund review",
+      "path": "refund-review.md",
+      "visibility": "manager_only",
+      "version": "1.0",
+      "sha256": "29a31bf5a52d4c28e4b244186387cd592788d4bf3ddb568fffbdb1bc4154c8e5"
+    },
+    {
+      "doc_id": "manager_loaner_exception",
+      "title": "Manager loaner extension review",
+      "path": "loaner-exception.md",
+      "visibility": "manager_only",
+      "version": "1.0",
+      "sha256": "940274cc77e9102c7a49fdfc47ef078baba599b5b7e04ec5a9a80f391db2e770"
+    },
+    {
+      "doc_id": "manager_discount_review",
+      "title": "Manager labor discount review",
+      "path": "discount-review.md",
+      "visibility": "manager_only",
+      "version": "1.0",
+      "sha256": "6cdc4a219919487c1f2eed4f15946783b0bda9a011722c887dd50788ff25fc9a"
+    },
+    {
+      "doc_id": "manager_vendor_exception",
+      "title": "Manager alternate vendor review",
+      "path": "vendor-exception.md",
+      "visibility": "manager_only",
+      "version": "1.0",
+      "sha256": "c6bfb06a1ba4f19a781ecf75e0e865c9e02eefd83378e33c60e200cb59cdf1c1"
+    },
+    {
+      "doc_id": "manager_escalation_review",
+      "title": "Manager complaint review cadence",
+      "path": "escalation-review.md",
+      "visibility": "manager_only",
+      "version": "1.0",
+      "sha256": "cfb6b8ef90764d6fa3e724a1d94bdf25f373d24ca116d9a288b1c0a67a232434"
+    },
+    {
+      "doc_id": "manager_access_review",
+      "title": "Manager demo access review",
+      "path": "access-review.md",
+      "visibility": "manager_only",
+      "version": "1.0",
+      "sha256": "4e430bd3a043bcc11110436200f3ffc20d59623f5d66f49d89e7110df209fa5f"
+    },
+    {
+      "doc_id": "manager_audit_review",
+      "title": "Manager adjustment audit",
+      "path": "audit-review.md",
+      "visibility": "manager_only",
+      "version": "1.0",
+      "sha256": "fc7e18aec4734472f3a72ffbcd28df2d60cf35d8c6d2494bee4a00e9cc2b7f62"
     }
-  ]
+  ],
+  "corpus_sha256": "bbdaab8b32afbd6ac22bcfb785cd9add12c7484a7b77397846d2ede5d850dc4e"
 }

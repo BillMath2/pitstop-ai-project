@@ -102,7 +102,8 @@ Results on 2026-09-26:
 - Wheel and source distribution built successfully. Their file lists excluded
   `.env`, planning material, local environments, caches, and generated traces.
 - Git tracked files/history contained only the original README before this work.
-  New files remain uncommitted; no publication or remote changes occurred.
+  The M0 files were subsequently committed as `ce12c61` (`builing M0`). No
+  publication or remote changes were part of M0 implementation.
 
 The initial offline fresh-environment install needed another dependency fetch;
 installation with network access then succeeded. Offline tests require no

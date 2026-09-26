@@ -1,11 +1,17 @@
 """Offline checks of the manifest boundary used by the starter CLI."""
 
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
 
-from dealer_evidence_agent.corpus import CorpusError, load_corpus
+from dealer_evidence_agent.corpus import (
+    CorpusError,
+    corpus_fingerprint,
+    load_corpus,
+    text_fingerprint,
+)
 
 
 @pytest.fixture
@@ -14,7 +20,7 @@ def corpus(tmp_path: Path) -> tuple[Path, dict]:
     folder.mkdir()
     (folder / "policy.md").write_text("# A fictional policy\nDemo text.", encoding="utf-8")
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "documents": [
             {
                 "doc_id": "shared_example",
@@ -22,6 +28,7 @@ def corpus(tmp_path: Path) -> tuple[Path, dict]:
                 "path": "policy.md",
                 "visibility": "shared",
                 "version": "1.0",
+                "sha256": text_fingerprint("# A fictional policy\nDemo text."),
             }
         ],
     }
@@ -29,12 +36,17 @@ def corpus(tmp_path: Path) -> tuple[Path, dict]:
 
 
 def write_manifest(path: Path, manifest: dict) -> None:
+    records = sorted(manifest["documents"], key=lambda entry: entry["doc_id"])
+    manifest["corpus_sha256"] = text_fingerprint(
+        json.dumps(records, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    )
     path.write_text(json.dumps(manifest), encoding="utf-8")
 
 
-def test_starter_corpus() -> None:
+def test_complete_corpus() -> None:
     documents = load_corpus(Path(__file__).resolve().parents[1] / "data/manifest.json")
-    assert len(documents) == 2
+    assert len(documents) == 24
+    assert sum(doc.visibility == "shared" for doc in documents) == 16
     assert {document.visibility for document in documents} == {"shared", "manager_only"}
     assert all("fictional" in document.text for document in documents)
 
@@ -108,3 +120,52 @@ def test_rejects_symlink_escape(corpus: tuple[Path, dict]) -> None:
     write_manifest(path, manifest)
     with pytest.raises(CorpusError, match="within corpus"):
         load_corpus(path)
+
+
+def test_content_change_invalidates_manifest(corpus: tuple[Path, dict]) -> None:
+    path, manifest = corpus
+    write_manifest(path, manifest)
+    (path.parent / "corpus/policy.md").write_text("A changed limit.", encoding="utf-8")
+    with pytest.raises(CorpusError, match="policy fingerprint"):
+        load_corpus(path)
+
+
+def test_visibility_change_invalidates_manifest(corpus: tuple[Path, dict]) -> None:
+    path, manifest = corpus
+    write_manifest(path, manifest)
+    manifest["documents"][0]["visibility"] = "manager_only"
+    path.write_text(json.dumps(manifest), encoding="utf-8")
+    with pytest.raises(CorpusError, match="Corpus fingerprint"):
+        load_corpus(path)
+
+
+def test_line_endings_are_portable(corpus: tuple[Path, dict]) -> None:
+    path, manifest = corpus
+    write_manifest(path, manifest)
+    before = load_corpus(path)
+    (path.parent / "corpus/policy.md").write_bytes(b"# A fictional policy\r\nDemo text.")
+    assert corpus_fingerprint(load_corpus(path)) == corpus_fingerprint(before)
+
+
+@pytest.mark.parametrize(
+    ("field", "value"),
+    [
+        ("doc_id", "new_id"),
+        ("title", "New title"),
+        ("path", "new.md"),
+        ("visibility", "manager_only"),
+        ("version", "2.0"),
+        ("text", "Changed text"),
+    ],
+)
+def test_fingerprint_binds_metadata_and_text(corpus: tuple[Path, dict], field: str, value: str):
+    path, manifest = corpus
+    write_manifest(path, manifest)
+    documents = load_corpus(path)
+    changed = (replace(documents[0], **{field: value}),)
+    assert corpus_fingerprint(changed) != corpus_fingerprint(documents)
+
+
+def test_fingerprint_is_independent_of_manifest_order() -> None:
+    documents = load_corpus(Path(__file__).resolve().parents[1] / "data/manifest.json")
+    assert corpus_fingerprint(documents) == corpus_fingerprint(tuple(reversed(documents)))

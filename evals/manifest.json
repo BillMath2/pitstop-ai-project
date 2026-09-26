@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "corpus_sha256": "bbdaab8b32afbd6ac22bcfb785cd9add12c7484a7b77397846d2ede5d850dc4e",
+  "splits": {
+    "development": {
+      "path": "development.jsonl",
+      "count": 16,
+      "sha256": "cf4369bd8bb2637c3d4c5a425e08121293d31746f188f79b979a1a0f1096d6fb"
+    },
+    "held_out": {
+      "path": "held_out.jsonl",
+      "count": 24,
+      "sha256": "966a238b58b0f23f1868505d070755ae9fce1060173d4c8e70aea18f95827aef"
+    }
+  }
+}

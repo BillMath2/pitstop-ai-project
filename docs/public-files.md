@@ -6,7 +6,8 @@ Only newly authored application material belongs in the eventual public repo:
 - Dependency locks: `uv.lock` and `requirements.lock`.
 - `src/dealer_evidence_agent/`, `tests/`, and synthetic `data/`.
 - Reviewed project documentation under `docs/`.
-- Later: public/synthetic `evals/` and `.github/workflows/ci.yml`.
+- Synthetic evaluation fixtures and their contract under `evals/`.
+- Later: `.github/workflows/ci.yml`.
 
 Never include `.env`, credentials, local runtimes, virtual environments,
 generated `runs/`, raw debug output, or career/internal planning material.

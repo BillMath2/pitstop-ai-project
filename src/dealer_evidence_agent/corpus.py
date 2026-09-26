@@ -1,9 +1,6 @@
-"""Load a small, trusted manifest and reject invalid metadata before use.
+"""Validate a trusted corpus and its reproducible content/metadata fingerprints."""
 
-This validates corpus structure, not user authorization. Role filtering and
-content fingerprints are added in M1.
-"""
-
+import hashlib
 import json
 import re
 from dataclasses import dataclass
@@ -11,7 +8,7 @@ from pathlib import Path, PurePosixPath, PureWindowsPath
 from typing import Literal, cast
 
 Visibility = Literal["shared", "manager_only"]
-_FIELDS = {"doc_id", "title", "path", "visibility", "version"}
+_FIELDS = {"doc_id", "title", "path", "visibility", "version", "sha256"}
 
 
 class CorpusError(ValueError):
@@ -26,6 +23,33 @@ class PolicyDocument:
     visibility: Visibility
     version: str
     text: str
+
+    @property
+    def sha256(self) -> str:
+        return text_fingerprint(self.text)
+
+
+def text_fingerprint(text: str) -> str:
+    """Hash UTF-8 text with universal newlines, preserving all other whitespace."""
+    normalized = text.replace("\r\n", "\n").replace("\r", "\n")
+    return hashlib.sha256(normalized.encode("utf-8")).hexdigest()
+
+
+def corpus_fingerprint(documents: tuple[PolicyDocument, ...]) -> str:
+    """Bind content to IDs, titles, paths, versions, and access labels, sorted by ID."""
+    records = [
+        {
+            "doc_id": doc.doc_id,
+            "title": doc.title,
+            "path": doc.path,
+            "visibility": doc.visibility,
+            "version": doc.version,
+            "sha256": doc.sha256,
+        }
+        for doc in sorted(documents, key=lambda doc: doc.doc_id)
+    ]
+    canonical = json.dumps(records, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    return text_fingerprint(canonical)
 
 
 def _read_utf8(path: Path) -> str:
@@ -45,10 +69,14 @@ def load_corpus(manifest_path: Path) -> tuple[PolicyDocument, ...]:
         manifest = json.loads(_read_utf8(manifest_path))
     except json.JSONDecodeError as exc:
         raise CorpusError("Manifest must contain valid JSON.") from exc
-    if not isinstance(manifest, dict) or set(manifest) != {"schema_version", "documents"}:
-        raise CorpusError("Manifest must contain only schema_version and documents.")
-    if type(manifest["schema_version"]) is not int or manifest["schema_version"] != 1:
-        raise CorpusError("Unsupported manifest schema_version; expected integer 1.")
+    if not isinstance(manifest, dict) or set(manifest) != {
+        "schema_version",
+        "documents",
+        "corpus_sha256",
+    }:
+        raise CorpusError("Manifest must contain schema_version, documents, and corpus_sha256.")
+    if type(manifest["schema_version"]) is not int or manifest["schema_version"] != 2:
+        raise CorpusError("Unsupported manifest schema_version; expected integer 2.")
     entries = manifest["documents"]
     if not isinstance(entries, list) or not entries:
         raise CorpusError("Manifest documents must be a nonempty list.")
@@ -93,6 +121,8 @@ def load_corpus(manifest_path: Path) -> tuple[PolicyDocument, ...]:
         text = _read_utf8(path)
         if not text.strip():
             raise CorpusError(f"Entry {index} policy is empty.")
+        if entry["sha256"] != text_fingerprint(text):
+            raise CorpusError(f"Entry {index} policy fingerprint mismatch.")
         documents.append(
             PolicyDocument(
                 doc_id=doc_id,
@@ -105,4 +135,7 @@ def load_corpus(manifest_path: Path) -> tuple[PolicyDocument, ...]:
         )
         seen_ids.add(doc_id)
         seen_paths.add(path)
-    return tuple(documents)
+    result = tuple(documents)
+    if manifest["corpus_sha256"] != corpus_fingerprint(result):
+        raise CorpusError("Corpus fingerprint mismatch; content or metadata changed.")
+    return result

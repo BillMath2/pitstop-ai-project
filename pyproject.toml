@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "dealer-evidence-agent"
 version = "0.1.0.dev0"
-description = "A bounded dealership policy and recall evidence agent (M0 scaffold)."
+description = "A bounded dealership evidence agent with an offline corpus and evaluation fixtures."
 readme = "README.md"
 requires-python = ">=3.12,<3.13"
 dependencies = [
@@ -33,6 +33,7 @@ include = [
     "/tests",
     "/data",
     "/docs",
+    "/evals",
     "/README.md",
     "/pyproject.toml",
     "/.env.example",
