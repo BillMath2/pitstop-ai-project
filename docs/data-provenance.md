@@ -19,8 +19,9 @@ before reporting success and implements an identity-scoped access layer.
 The implemented fixed mapping is `tech_demo` -> `technician` and
 `manager_demo` -> `manager`. Technicians may retrieve `shared` policies;
 managers may retrieve both `shared` and `manager_only` policies. Unknown
-identities fail closed. Listing enforces this mapping now; future retrieval must
-filter documents before indexing, scoring, snippets, or model context.
+identities fail closed. Listing and M2 retrieval enforce this mapping. Search
+filters before tokenization, indexing, scoring, or snippets; a future model must
+receive only that authorized evidence.
 
 These are simulated identities selected by the person running a local CLI.
 The repository's synthetic files remain readable on disk. This demonstrates
@@ -47,8 +48,9 @@ See [the fixture contract](../evals/README.md) for isolation and scoring rules.
 
 ## Results and licenses
 
-There are no agent-quality or held-out evaluation results at M1. Installation
-and offline validation are engineering checks, not evidence of model quality.
+M2 has development-only retrieval metrics; there are no agent-answer-quality or
+held-out evaluation results. Installation, offline validation, and document
+retrieval checks are not evidence of model answer quality.
 Dependency versions and license references are recorded in `m0-decisions.md`.
 Choose a license for the new project before public release; installing an
 open-source dependency does not choose a license for the application itself.

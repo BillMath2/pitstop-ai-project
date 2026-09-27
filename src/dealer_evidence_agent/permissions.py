@@ -1,6 +1,6 @@
 """Selectable demo identities, not authentication or filesystem protection.
 
-Future retrieval must build its index from authorized_documents(), so restricted
+Retrieval builds its index from authorized_documents(), so restricted
 text never enters scoring, snippets, or model context for a technician.
 """
 

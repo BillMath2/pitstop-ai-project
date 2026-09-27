@@ -1,5 +1,6 @@
 """Exercise user-facing success and failure without services or credentials."""
 
+import json
 import os
 import subprocess
 import sys
@@ -72,3 +73,74 @@ def test_missing_evaluation_manifest_is_an_error(tmp_path, capsys, monkeypatch):
     monkeypatch.chdir(Path(__file__).resolve().parents[1])
     assert main(["validate-evals", "--eval-manifest", str(tmp_path / "missing.json")]) == 1
     assert "EvaluationError" in capsys.readouterr().err
+
+
+def test_search_json_without_credentials(capsys, monkeypatch):
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    assert main(["search-policies", "loaner keys", "--identity", "tech_demo", "--json"]) == 0
+    result = json.loads(capsys.readouterr().out)
+    assert result["status"] == "matches"
+    assert len(result["hits"]) <= 3
+    assert all(hit["doc_id"].startswith("shared_") for hit in result["hits"])
+    assert all(hit["sha256"] and hit["start_line"] for hit in result["hits"])
+
+
+def test_search_human_output_and_no_match(capsys, monkeypatch):
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    assert main(["search-policies", "loaner keys", "--identity", "tech_demo"]) == 0
+    output = capsys.readouterr().out
+    assert "evidence candidates" in output and "Source:" in output
+    assert main(["search-policies", "zzzxxyynotapolicy", "--identity", "tech_demo"]) == 0
+    assert "No matching authorized policies" in capsys.readouterr().out
+
+
+def test_search_unknown_identity_before_corpus_io(tmp_path, capsys):
+    assert (
+        main(
+            [
+                "search-policies",
+                "goodwill",
+                "--identity",
+                "admin",
+                "--manifest",
+                str(tmp_path / "missing.json"),
+            ]
+        )
+        == 1
+    )
+    captured = capsys.readouterr()
+    assert captured.out == ""
+    assert "Unknown demo identity" in captured.err and "Corpus" not in captured.err
+
+
+@pytest.mark.parametrize("arguments", [[""], ["loaner", "--top-k", "6"]])
+def test_invalid_search_before_corpus_io(tmp_path, capsys, arguments):
+    assert (
+        main(
+            [
+                "search-policies",
+                *arguments,
+                "--identity",
+                "tech_demo",
+                "--manifest",
+                str(tmp_path / "missing.json"),
+            ]
+        )
+        == 1
+    )
+    assert "SearchError" in capsys.readouterr().err
+
+
+def test_retrieval_evaluation_cli(capsys, monkeypatch):
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    assert main(["eval-retrieval"]) == 0
+    report = json.loads(capsys.readouterr().out)
+    assert report["split"] == "development"
+    assert report["policy_cases"] == 6
+
+
+def test_retrieval_evaluation_has_no_held_out_option():
+    with pytest.raises(SystemExit) as exc:
+        main(["eval-retrieval", "--include-held-out"])
+    assert exc.value.code == 2

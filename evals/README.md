@@ -66,3 +66,20 @@ result, VIN eligibility, repair completion, or safety conclusion may be invented
 
 Report development and held-out metrics separately, with corpus and case hashes,
 and distinguish structural fixture validation from executed evaluation results.
+
+## M2 retrieval evaluation
+
+`dealer-evidence eval-retrieval` runs development-only retrieval checks. It has
+no held-out option. Six policy cases contribute to mean document recall@k and
+mean reciprocal rank@k; all policy, permission, and missing-evidence searches
+are checked for unauthorized and explicitly forbidden document hits. The unknown
+identity case checks rejection. The three recall and two clarification cases are
+skipped because M2 has no router or recall tool.
+
+Expected IDs are used only after search to score results; they are never query
+inputs. Missing-evidence and permission cases may return authorized lexical
+matches, so this runner does not score their final abstention behavior. Nor does
+document recall establish that a bounded excerpt includes every required fact.
+Intermediate authorization isolation is covered by separate unit tests.
+The JSON report records the corpus hash, development-file hash, retrieval
+version, k, per-case results, and aggregate metrics.
