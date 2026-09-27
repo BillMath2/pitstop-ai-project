@@ -8,6 +8,7 @@ Only newly authored application material belongs in the eventual public repo:
 - Public NHTSA response captures and labeled synthetic fixtures under `data/recalls/`.
 - Reviewed project documentation under `docs/`.
 - Synthetic evaluation fixtures and their contract under `evals/`.
+- Reviewed development smoke scripts under `scripts/` (their generated output stays ignored).
 - Later: `.github/workflows/ci.yml`.
 
 Never include `.env`, credentials, local runtimes, virtual environments,

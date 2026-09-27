@@ -1,14 +1,16 @@
 # Dealer Evidence Agent
 
 A Python portfolio project for a fictional dealership: a bounded LangGraph agent
-that will choose between permission-aware policy search and public NHTSA recall
-lookup, then answer with evidence or explain what is missing.
+that chooses between permission-aware policy search and public NHTSA recall
+lookup, then answers with evidence or explains what is missing.
 
-**Current status: M3 public recall lookup.** The CLI searches 24 fictional
-policies with permission-scoped BM25 and looks up general NHTSA campaigns by
-year/make/model. Recorded recall responses and synthetic failure fixtures support
-offline replay. Model routing, request traces, and end-to-end answer evaluation
-are still planned.
+**Current status: M4 complete; M5 tracing is next.** The `ask` CLI
+runs a bounded LangGraph route/tool/answer flow with permission-scoped policy
+search, public NHTSA recall lookup, typed citations, and model-boundary trace hooks.
+Offline validation passes 279 tests (one existing skip), and all seven cases in
+the final live OpenAI development smoke pass manual review. The initial routing
+failures and their fix are preserved in [live results](docs/m4-live-development.md) and
+[M4 decisions and remaining work](docs/m4-decisions.md).
 
 ## Quick start
 
@@ -35,8 +37,9 @@ If you use [uv](https://docs.astral.sh/uv/getting-started/installation/),
 locked dependencies. Then use the same executable paths above, or
 `uv run --locked dealer-evidence validate-corpus`.
 
-No credentials are needed. Tests, policy search, and fixture replay run offline;
-only recall lookup with explicit `--live` makes an external service call.
+No credentials are needed for the quick-start commands. Tests, policy search,
+and fixture replay run offline. `lookup-recalls --live` calls NHTSA; `ask` calls
+OpenAI and, when the model selects recall lookup, calls NHTSA live.
 The default manifest is `data/manifest.json`, relative to the working directory;
 use `validate-corpus --manifest PATH` to validate another corpus. Policy paths
 are relative to the `corpus/` directory next to that manifest. The corpus stays
@@ -98,22 +101,52 @@ VIN's eligibility, repair completion, or safety. Recorded responses describe the
 capture time, not current recall status. Source text is evidence, not instructions.
 See [M3 decisions](docs/m3-decisions.md) and [recall fixture provenance](data/recalls/README.md).
 
-## Planned agent behavior
+## Ask a question (live model)
 
-The model will select `search_policies(query)` or
-`lookup_recalls(make, model, year)`, or request clarification. Code will validate
-arguments, enforce permissions, and verify evidence and citations. Each request
-will allow at most two logical model calls and one logical data-tool call.
+Set `OPENAI_API_KEY` in the process environment, or explicitly load your local
+`.env` file. The CLI does not load `.env` automatically. Environment variables
+take precedence over values in the specified file. Keep the pinned model in
+`.env.example`; a different model setting produces an error rather than a fallback.
+
+```powershell
+.\.venv\Scripts\dealer-evidence.exe ask "What should I record for a loaner return?" --identity tech_demo --env-file .env
+.\.venv\Scripts\dealer-evidence.exe ask "What is the goodwill approval maximum?" --identity manager_demo --env-file .env --show-evidence
+.\.venv\Scripts\dealer-evidence.exe ask "Look up general recalls for a 2020 Toyota Corolla." --identity tech_demo --env-file .env --json
+.\.venv\Scripts\dealer-evidence.exe ask "Any recalls for my Honda Civic?" --identity tech_demo --env-file .env
+```
+
+The model returns one structured decision selecting `search_policies(query)` or
+`lookup_recalls(make, model, year)`, or a clarification/unsupported disposition.
+Code validates arguments and identity,
+then independently rechecks policy permissions before supplying up to four full
+documents. The existing direct search command retains its default of three excerpts.
+Answer citations resolve only to supplied evidence. Citation membership does not
+prove factual support; that requires manual answer evaluation.
+
+Each request allows at most two logical model calls and one logical data-tool
+call, with zero automatic retries and a six-step graph limit. Missing vehicle
+values and recognized ambiguity prevent recall execution. Mixed requests ask the
+user to choose one task. Clarification is terminal: resubmit a complete question.
+No evidence, successful empty recall results, provider failures, and invalid
+citations remain distinct outcomes. See M4 decisions for conservative language
+checks, timing limits, and remaining live validation.
 
 The initial model choice is OpenAI `gpt-4.1-mini-2025-04-14`, with the OpenAI SDK
-and strict function schemas. Its documented support is recorded in
-[M0 decisions](docs/m0-decisions.md); live account access has not been tested.
-`.env.example` lists future configuration placeholders. The current CLI does
-not load `.env`, use API keys, or silently fall back to another model.
+and strict structured-output schemas. Its documented support is recorded in
+[M0 decisions](docs/m0-decisions.md). Live account access is now verified. The
+final seven-case development check produced four supported answers, one appropriate
+abstention, and two clarifications. It is not held-out validation or a general
+answer-quality estimate.
 
-The completed demo will add JSONL traces at the model request boundary,
-end-to-end evaluation execution, and a deliberately broken
-authorization change that fails unchanged tests in CI. Those are later milestones.
+`ask` writes ignored `runs/<run_id>.jsonl` files with ordered graph events and
+evidence IDs/content hashes derived from the final SDK request. Routine traces
+omit message bodies, questions, credentials, and upstream error text. `--show-evidence`
+explicitly displays authorized source content in CLI output. The seven-case
+development smoke in `scripts/m4_smoke.py` uses the live model with labeled,
+recorded NHTSA evidence; it never opens held-out cases or calls NHTSA live.
+
+Full request audit metadata, a trace-inspection CLI, reviewed trace examples,
+end-to-end evaluation, and the production-code regression/CI demo are later work.
 
 ## Demo boundaries
 
@@ -134,4 +167,5 @@ See [data provenance](docs/data-provenance.md),
 [M0 decisions and verification](docs/m0-decisions.md),
 [M1 decisions and verification](docs/m1-decisions.md),
 [M2 decisions and verification](docs/m2-decisions.md), and
-[M3 decisions and verification](docs/m3-decisions.md).
+[M3 decisions and verification](docs/m3-decisions.md), and
+[M4 decisions and verification](docs/m4-decisions.md).

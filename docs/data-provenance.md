@@ -20,8 +20,9 @@ The implemented fixed mapping is `tech_demo` -> `technician` and
 `manager_demo` -> `manager`. Technicians may retrieve `shared` policies;
 managers may retrieve both `shared` and `manager_only` policies. Unknown
 identities fail closed. Listing and M2 retrieval enforce this mapping. Search
-filters before tokenization, indexing, scoring, or snippets; a future model must
-receive only that authorized evidence.
+filters before tokenization, indexing, scoring, or snippets. M4 independently
+rechecks IDs, metadata, and visibility against the trusted corpus before sending
+canonical full policy text to the answer model.
 
 These are simulated identities selected by the person running a local CLI.
 The repository's synthetic files remain readable on disk. This demonstrates
@@ -53,9 +54,13 @@ See [the fixture contract](../evals/README.md) for isolation and scoring rules.
 ## Results and licenses
 
 M2 has development-only retrieval metrics; M3 has live tool smoke verification
-and offline response-contract checks. There are no agent-answer-quality or
-held-out evaluation results. These engineering checks are not evidence of model
-answer quality.
+and offline response-contract checks. M4 adds recording-client graph, citation,
+context-guard, and SDK-boundary checks. Its initial live-model development smoke
+passed 4/7 cases; after fixing contradictory routing outputs, the final run
+passed 7/7 (four answers, one abstention, two clarifications). Both runs used
+the labeled public recall fixture, not live NHTSA requests.
+See [the per-case review](m4-live-development.md). There are no held-out evaluation
+results. Offline engineering checks alone are not evidence of model answer quality.
 Dependency versions and license references are recorded in `m0-decisions.md`.
 Choose a license for the new project before public release; installing an
 open-source dependency does not choose a license for the application itself.

@@ -7,8 +7,11 @@ from dataclasses import asdict
 from importlib.metadata import version
 from pathlib import Path
 
+from dealer_evidence_agent.answers import AgentError, Answer
 from dealer_evidence_agent.corpus import CorpusError, corpus_fingerprint, load_corpus
 from dealer_evidence_agent.evaluations import EvaluationError, load_evaluations
+from dealer_evidence_agent.graph import run_agent
+from dealer_evidence_agent.model_client import ModelClient
 from dealer_evidence_agent.permissions import AuthorizationError, authorized_documents, resolve_role
 from dealer_evidence_agent.recall_fixtures import (
     DEFAULT_FIXTURE_MANIFEST,
@@ -29,6 +32,57 @@ from dealer_evidence_agent.retrieval import (
     validate_search,
 )
 from dealer_evidence_agent.retrieval_evaluation import evaluate_retrieval
+from dealer_evidence_agent.tracing import JsonlTrace
+
+
+def _ask(args) -> int:
+    client = trace = result = None
+    try:
+        resolve_role(args.identity)
+        validate_search(args.query, 4)
+        documents = load_corpus(args.manifest)
+        trace = JsonlTrace(args.runs_dir)
+        client = ModelClient.from_environment(args.env_file)
+        result = run_agent(
+            args.query,
+            identity=args.identity,
+            documents=documents,
+            model=client,
+            trace=trace,
+        )
+        answer = result.answer
+    except (AgentError, AuthorizationError, SearchError, CorpusError) as exc:
+        code = str(exc) if isinstance(exc, AgentError) else type(exc).__name__
+        answer = Answer("error", f"Request setup failed: {code}.")
+        if trace is not None:
+            try:
+                trace.emit("request_failed", error=code)
+            except AgentError:
+                answer = Answer("error", "Request failed: trace_write_failed.")
+    finally:
+        if client is not None:
+            client.close()
+        if trace is not None:
+            try:
+                trace.close()
+            except AgentError:
+                answer = Answer("error", "Request failed: trace_write_failed.")
+    output = {**asdict(answer), "run_id": trace.run_id if trace else None}
+    if result is not None:
+        output.update(model_calls=result.model_calls, tool_calls=result.tool_calls)
+    if args.show_evidence and result is not None and answer.status != "error":
+        output["evidence"] = [asdict(item) for item in result.evidence]
+    if args.json:
+        print(json.dumps(output, ensure_ascii=False, indent=2))
+    else:
+        print(f"{answer.status}: {answer.text}")
+        for citation in answer.citations:
+            print(f"[{citation.kind}:{citation.id}] {citation.source}")
+        if trace:
+            print(f"Trace: {trace.path}")
+        for item in output.get("evidence", []):
+            print(f"\n{item['citation']['id']}\n{item['content']}")
+    return 1 if answer.status == "error" else 0
 
 
 def _print_recalls(result: RecallResult, as_json: bool) -> None:
@@ -67,10 +121,19 @@ def _print_recalls(result: RecallResult, as_json: bool) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="dealer-evidence",
-        description="Dealer Evidence Agent: policy search and public recall evidence (M3).",
+        description="Dealer Evidence Agent: bounded policy and public recall answers (M4).",
     )
     parser.add_argument("--version", action="version", version=version("dealer-evidence-agent"))
     commands = parser.add_subparsers(dest="command", required=True)
+    ask = commands.add_parser("ask", help="Ask the live model; recall routing calls NHTSA live.")
+    ask.add_argument("query", help="One question, up to 1000 characters")
+    ask.add_argument("--identity", required=True, help="tech_demo or manager_demo")
+    ask.add_argument("--env-file", type=Path, help="Explicitly load API settings from this file")
+    ask.add_argument("--runs-dir", type=Path, default=Path("runs"))
+    ask.add_argument("--json", action="store_true")
+    ask.add_argument(
+        "--show-evidence", action="store_true", help="Display authorized supplied text"
+    )
     validate = commands.add_parser("validate-corpus", help="Validate policy metadata and files.")
     listing = commands.add_parser("list-policies", help="List policies visible to a demo identity.")
     listing.add_argument("--identity", required=True, help="tech_demo or manager_demo")
@@ -117,7 +180,7 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Explicit authoring/release check of both splits; never use for tuning.",
     )
-    for command in (validate, listing, evaluations, search, retrieval_eval):
+    for command in (validate, listing, evaluations, search, retrieval_eval, ask):
         command.add_argument(
             "--manifest",
             type=Path,
@@ -125,6 +188,8 @@ def main(argv: list[str] | None = None) -> int:
             help="Corpus manifest (default: data/manifest.json, relative to working directory).",
         )
     args = parser.parse_args(argv)
+    if args.command == "ask":
+        return _ask(args)
     try:
         if args.command == "lookup-recalls":
             resolve_role(args.identity)

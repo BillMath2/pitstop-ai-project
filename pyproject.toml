@@ -31,6 +31,7 @@ packages = ["src/dealer_evidence_agent"]
 include = [
     "/src",
     "/tests",
+    "/scripts",
     "/data",
     "/docs",
     "/evals",
