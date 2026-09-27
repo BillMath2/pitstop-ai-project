@@ -1,0 +1,10 @@
+{
+  "frozen_at": "2026-09-27T14:18:15.120145+00:00",
+  "path": "data/recalls/v2/manifest.json",
+  "fixtures_sha256": "c511b208b2c54edd81a4cb1820fcde0fc08c43c6c50fcdf2c022dbec0e14851e",
+  "bodies": {
+    "subaru-outback-2019.json": "9fdf1e8a958e7eb35f18ab5fef3c462b096053669fa3bf8c4f625789f8d717d6",
+    "hyundai-tucson-2023.json": "3db286b820fc275f88b26c3c36efad253901294915fd5c3ab5e5ef14dc9bc767",
+    "chevrolet-malibu-2017.json": "32036a703648639f389fc7c081406da06785bfac86098f270187a4cc632152d3"
+  }
+}

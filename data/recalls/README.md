@@ -65,3 +65,15 @@ review schema compatibility and expected statuses, then compute a new manifest
 hash using `fixture_fingerprint()`. Extend `.gitattributes` for the new directory
 and run validation against it. Never relabel synthetic data as a real capture or
 change held-out cases to fit response observations.
+
+## M7 held-out captures (v2)
+
+`v2/manifest.json` adds three public captures from 2026-09-27 UTC: 2019 Subaru
+Outback (3 records), 2023 Hyundai Tucson (2), and 2017 Chevrolet Malibu (4).
+They were frozen before the live-model held-out pass. Only Malibu reached replay;
+the other two cases unnecessarily clarified and remain evaluation failures.
+
+`scripts/m7_capture_recalls.py` records exact decoded HTTP entity bytes, URLs,
+UTC times, HTTP metadata, and hashes in a new directory and refuses overwrites.
+v1 remains frozen. Replaying v2 makes no network request. The separate Toyota
+live graph smoke is labeled `live` in [M7 results](../../docs/m7-results.md).

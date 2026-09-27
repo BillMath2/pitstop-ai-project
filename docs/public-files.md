@@ -13,6 +13,8 @@ Only newly authored application material belongs in the eventual public repo:
 - `.github/workflows/ci.yml` for offline checks.
 - Reviewed regression patch and reproduction record under `docs/`; never a broken production tree.
 - Labeled synthetic model replies under `evals/model_replies/`; never presented as model quality.
+- Reviewed M7 reports, freezes, qualitative grading, and scoped audit under `docs/evidence/`.
+- The offline `docs/demo.html` replay and instructions; not a completed video.
 
 Never include `.env`, credentials, local runtimes, virtual environments,
 generated `runs/`, raw debug output, or career/internal planning material.

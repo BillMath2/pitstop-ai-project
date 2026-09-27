@@ -1,0 +1,464 @@
+{
+  "mode": "live_model_development_demonstration",
+  "part_of_held_out_score": false,
+  "cases": [
+    {
+      "identity": "tech_demo",
+      "question": "Tell me the exact maximum goodwill credit a service manager can approve.",
+      "answer": {
+        "status": "insufficient_evidence",
+        "text": "The supplied evidence does not answer this question.",
+        "citations": [],
+        "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+        "model_calls": 2,
+        "tool_calls": 1
+      },
+      "trace": {
+        "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+        "complete": true,
+        "outcome": "insufficient_evidence",
+        "model_attempts": 2,
+        "unconfirmed_attempts": [],
+        "unconfirmed_tools": [],
+        "tool_calls": 1,
+        "usage": {
+          "prompt_tokens": 1361,
+          "completion_tokens": 103,
+          "total_tokens": 1464
+        },
+        "events": [
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 1,
+            "time": "2026-09-27T14:26:30.106034+00:00",
+            "event": "request_started",
+            "code": {
+              "revision": "5df166d6bd89741424680fcefb6c420e2663b300",
+              "working_tree_dirty": true,
+              "source_sha256": "d43efec06b7a0756953bf01216e283dab19affbe8a77be513b027fe1b12ac4d2",
+              "python": "3.12.14",
+              "packages": {
+                "dealer-evidence-agent": "0.1.0.dev0",
+                "openai": "3.19.2",
+                "langgraph": "1.2.12",
+                "httpx": "0.28.1",
+                "rank-bm25": "0.2.2"
+              }
+            },
+            "configuration": {
+              "request_seconds": 65.0,
+              "graph_step_limit": 6,
+              "max_model_calls": 2,
+              "max_tool_calls": 1,
+              "max_retries": 0,
+              "policy_top_k": 4,
+              "recall_limit": 5
+            },
+            "configuration_sha256": "eefce7e5861a73eca20bd499c829b989e6cbbc779f9ab917660b5ffcecf4197c"
+          },
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 2,
+            "time": "2026-09-27T14:26:30.110095+00:00",
+            "event": "identity_validated",
+            "identity": "tech_demo"
+          },
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 3,
+            "time": "2026-09-27T14:26:30.125170+00:00",
+            "event": "request_validated",
+            "identity": "tech_demo",
+            "corpus_sha256": "bbdaab8b32afbd6ac22bcfb785cd9add12c7484a7b77397846d2ede5d850dc4e"
+          },
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 4,
+            "time": "2026-09-27T14:26:30.328254+00:00",
+            "event": "model_request",
+            "stage": "route",
+            "provider": "openai",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "prompt_version": "m4-v2",
+            "request_sha256": "fff8485ae1d63b2abeef269f6c0576277d0df994dcb6886adb9976ad97cf048d",
+            "prompt_sha256": "bcec4e2ad008c2a9854fe2d71bec0fb443df4cb4efdfbe373ed75800bda4fa03",
+            "schema_sha256": "8353ccd044c10b0b61f59baf1c7b65e07bd24c72c75efe3491bde0cb9f785b07",
+            "settings": {
+              "temperature": 0,
+              "max_completion_tokens": 1800
+            },
+            "timeout_seconds": 25.0,
+            "evidence": [],
+            "attempt": 1,
+            "retry_count": 0
+          },
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 5,
+            "time": "2026-09-27T14:26:31.626807+00:00",
+            "event": "model_response",
+            "stage": "route",
+            "attempt": 1,
+            "elapsed_seconds": 1.297000000020489,
+            "usage": {
+              "prompt_tokens": 488,
+              "completion_tokens": 23,
+              "total_tokens": 511
+            },
+            "retry_count": 0
+          },
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 6,
+            "time": "2026-09-27T14:26:31.631881+00:00",
+            "event": "route_selected",
+            "action": "search_policies",
+            "arguments_sha256": "4c8e0609f5e147134511bf66c88ebee9259615df2330ca70068e965210c7f9f3",
+            "arguments": {
+              "query_redacted": true
+            }
+          },
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 7,
+            "time": "2026-09-27T14:26:31.634902+00:00",
+            "event": "tool_started",
+            "action": "search_policies",
+            "attempt": 1,
+            "retry_count": 0
+          },
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 8,
+            "time": "2026-09-27T14:26:31.644668+00:00",
+            "event": "tool_completed",
+            "action": "search_policies",
+            "status": "matches",
+            "evidence_ids": [
+              "shared_complaint_intake",
+              "shared_estimate_approval",
+              "shared_record_corrections",
+              "shared_shift_handoff"
+            ],
+            "retrieval_version": "bm25-okapi-v1",
+            "scope_sha256": "238c9e4bfb990fead3bce5cae9d37a7e3681699a3d86c5498daf33f8cc016143",
+            "retry_count": 0,
+            "elapsed_seconds": 0.01600000000325963
+          },
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 9,
+            "time": "2026-09-27T14:26:31.648561+00:00",
+            "event": "model_request",
+            "stage": "answer",
+            "provider": "openai",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "prompt_version": "m4-v2",
+            "request_sha256": "1c70e2dfc8d1eddb338c47e1c12e4270459bbe51491c7c32967e2e01d350bc03",
+            "prompt_sha256": "f13dce65a7fa5b5ec36e97a3d8140d81347a61690fdacc3ebeb9389671123244",
+            "schema_sha256": "a741938105a583cbacd5ac426ce253b11816d2b35675a5328e6c01cf524525d5",
+            "settings": {
+              "temperature": 0,
+              "max_completion_tokens": 1800
+            },
+            "timeout_seconds": 25.0,
+            "evidence": [
+              {
+                "kind": "policy",
+                "id": "shared_complaint_intake",
+                "content_sha256": "48fdd87b93e121034a2463fb0e5899e0f9337fa887bafc0c7c67db6295ace0ab"
+              },
+              {
+                "kind": "policy",
+                "id": "shared_estimate_approval",
+                "content_sha256": "e98695d49f9cfdce416b678a29fbe0c2592e7d7fc585cd574bc9bf66d0e6ab27"
+              },
+              {
+                "kind": "policy",
+                "id": "shared_record_corrections",
+                "content_sha256": "7f02831b1a67520e9a874c323b5932c3a7721f5237e560f3e2924f5ddccdc1bc"
+              },
+              {
+                "kind": "policy",
+                "id": "shared_shift_handoff",
+                "content_sha256": "366dd90ad5f158f2a6339cbecd51bdb9102e65be13eabefc37e03e3f05a43e64"
+              }
+            ],
+            "attempt": 1,
+            "retry_count": 0
+          },
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 10,
+            "time": "2026-09-27T14:26:32.584136+00:00",
+            "event": "model_response",
+            "stage": "answer",
+            "attempt": 1,
+            "elapsed_seconds": 0.9369999999762513,
+            "usage": {
+              "prompt_tokens": 873,
+              "completion_tokens": 80,
+              "total_tokens": 953
+            },
+            "retry_count": 0
+          },
+          {
+            "trace_version": 1,
+            "run_id": "c95aef6b7eed463ab40c6bb3f387efa4",
+            "sequence": 11,
+            "time": "2026-09-27T14:26:32.589132+00:00",
+            "event": "request_finished",
+            "status": "insufficient_evidence",
+            "citation_ids": [],
+            "model_calls": 2,
+            "tool_calls": 1,
+            "elapsed_seconds": 2.5929999999934807
+          }
+        ]
+      }
+    },
+    {
+      "identity": "manager_demo",
+      "question": "Tell me the exact maximum goodwill credit a service manager can approve.",
+      "answer": {
+        "status": "answered",
+        "text": "The exact maximum goodwill credit a service manager can approve is $180 per service visit for a documented scheduling or communication mistake.",
+        "citations": [
+          {
+            "kind": "policy",
+            "id": "manager_goodwill_review",
+            "source": "goodwill-review.md"
+          }
+        ],
+        "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+        "model_calls": 2,
+        "tool_calls": 1
+      },
+      "trace": {
+        "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+        "complete": true,
+        "outcome": "answered",
+        "model_attempts": 2,
+        "unconfirmed_attempts": [],
+        "unconfirmed_tools": [],
+        "tool_calls": 1,
+        "usage": {
+          "prompt_tokens": 1440,
+          "completion_tokens": 70,
+          "total_tokens": 1510
+        },
+        "events": [
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 1,
+            "time": "2026-09-27T14:26:35.991148+00:00",
+            "event": "request_started",
+            "code": {
+              "revision": "5df166d6bd89741424680fcefb6c420e2663b300",
+              "working_tree_dirty": true,
+              "source_sha256": "d43efec06b7a0756953bf01216e283dab19affbe8a77be513b027fe1b12ac4d2",
+              "python": "3.12.14",
+              "packages": {
+                "dealer-evidence-agent": "0.1.0.dev0",
+                "openai": "3.19.2",
+                "langgraph": "1.2.12",
+                "httpx": "0.28.1",
+                "rank-bm25": "0.2.2"
+              }
+            },
+            "configuration": {
+              "request_seconds": 65.0,
+              "graph_step_limit": 6,
+              "max_model_calls": 2,
+              "max_tool_calls": 1,
+              "max_retries": 0,
+              "policy_top_k": 4,
+              "recall_limit": 5
+            },
+            "configuration_sha256": "eefce7e5861a73eca20bd499c829b989e6cbbc779f9ab917660b5ffcecf4197c"
+          },
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 2,
+            "time": "2026-09-27T14:26:35.993104+00:00",
+            "event": "identity_validated",
+            "identity": "manager_demo"
+          },
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 3,
+            "time": "2026-09-27T14:26:36.018428+00:00",
+            "event": "request_validated",
+            "identity": "manager_demo",
+            "corpus_sha256": "bbdaab8b32afbd6ac22bcfb785cd9add12c7484a7b77397846d2ede5d850dc4e"
+          },
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 4,
+            "time": "2026-09-27T14:26:36.322942+00:00",
+            "event": "model_request",
+            "stage": "route",
+            "provider": "openai",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "prompt_version": "m4-v2",
+            "request_sha256": "fff8485ae1d63b2abeef269f6c0576277d0df994dcb6886adb9976ad97cf048d",
+            "prompt_sha256": "bcec4e2ad008c2a9854fe2d71bec0fb443df4cb4efdfbe373ed75800bda4fa03",
+            "schema_sha256": "8353ccd044c10b0b61f59baf1c7b65e07bd24c72c75efe3491bde0cb9f785b07",
+            "settings": {
+              "temperature": 0,
+              "max_completion_tokens": 1800
+            },
+            "timeout_seconds": 25.0,
+            "evidence": [],
+            "attempt": 1,
+            "retry_count": 0
+          },
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 5,
+            "time": "2026-09-27T14:26:37.357408+00:00",
+            "event": "model_response",
+            "stage": "route",
+            "attempt": 1,
+            "elapsed_seconds": 1.0309999999590218,
+            "usage": {
+              "prompt_tokens": 488,
+              "completion_tokens": 23,
+              "total_tokens": 511
+            },
+            "retry_count": 0
+          },
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 6,
+            "time": "2026-09-27T14:26:37.360356+00:00",
+            "event": "route_selected",
+            "action": "search_policies",
+            "arguments_sha256": "4c8e0609f5e147134511bf66c88ebee9259615df2330ca70068e965210c7f9f3",
+            "arguments": {
+              "query_redacted": true
+            }
+          },
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 7,
+            "time": "2026-09-27T14:26:37.364347+00:00",
+            "event": "tool_started",
+            "action": "search_policies",
+            "attempt": 1,
+            "retry_count": 0
+          },
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 8,
+            "time": "2026-09-27T14:26:37.374625+00:00",
+            "event": "tool_completed",
+            "action": "search_policies",
+            "status": "matches",
+            "evidence_ids": [
+              "manager_discount_review",
+              "manager_goodwill_review",
+              "manager_refund_review",
+              "shared_complaint_intake"
+            ],
+            "retrieval_version": "bm25-okapi-v1",
+            "scope_sha256": "bbdaab8b32afbd6ac22bcfb785cd9add12c7484a7b77397846d2ede5d850dc4e",
+            "retry_count": 0,
+            "elapsed_seconds": 0.015000000013969839
+          },
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 9,
+            "time": "2026-09-27T14:26:37.378549+00:00",
+            "event": "model_request",
+            "stage": "answer",
+            "provider": "openai",
+            "model": "gpt-4.1-mini-2025-04-14",
+            "prompt_version": "m4-v2",
+            "request_sha256": "1512d98b81ad4f46dd687845374db842e110c2a9cdd91d994145580ef473b346",
+            "prompt_sha256": "f13dce65a7fa5b5ec36e97a3d8140d81347a61690fdacc3ebeb9389671123244",
+            "schema_sha256": "a741938105a583cbacd5ac426ce253b11816d2b35675a5328e6c01cf524525d5",
+            "settings": {
+              "temperature": 0,
+              "max_completion_tokens": 1800
+            },
+            "timeout_seconds": 25.0,
+            "evidence": [
+              {
+                "kind": "policy",
+                "id": "manager_discount_review",
+                "content_sha256": "6cdc4a219919487c1f2eed4f15946783b0bda9a011722c887dd50788ff25fc9a"
+              },
+              {
+                "kind": "policy",
+                "id": "manager_goodwill_review",
+                "content_sha256": "e77904c70973de2d15beafe2b76b48b05bb19405bec509f2dfce07b5e094212a"
+              },
+              {
+                "kind": "policy",
+                "id": "manager_refund_review",
+                "content_sha256": "29a31bf5a52d4c28e4b244186387cd592788d4bf3ddb568fffbdb1bc4154c8e5"
+              },
+              {
+                "kind": "policy",
+                "id": "shared_complaint_intake",
+                "content_sha256": "48fdd87b93e121034a2463fb0e5899e0f9337fa887bafc0c7c67db6295ace0ab"
+              }
+            ],
+            "attempt": 1,
+            "retry_count": 0
+          },
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 10,
+            "time": "2026-09-27T14:26:38.035793+00:00",
+            "event": "model_response",
+            "stage": "answer",
+            "attempt": 1,
+            "elapsed_seconds": 0.6570000000065193,
+            "usage": {
+              "prompt_tokens": 952,
+              "completion_tokens": 47,
+              "total_tokens": 999
+            },
+            "retry_count": 0
+          },
+          {
+            "trace_version": 1,
+            "run_id": "2e4f344594e64f7d85fca61c6c9c5f1e",
+            "sequence": 11,
+            "time": "2026-09-27T14:26:38.038791+00:00",
+            "event": "request_finished",
+            "status": "answered",
+            "citation_ids": [
+              "manager_goodwill_review"
+            ],
+            "model_calls": 2,
+            "tool_calls": 1,
+            "elapsed_seconds": 2.172000000020489
+          }
+        ]
+      }
+    }
+  ]
+}

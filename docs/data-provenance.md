@@ -59,8 +59,10 @@ context-guard, and SDK-boundary checks. Its initial live-model development smoke
 passed 4/7 cases; after fixing contradictory routing outputs, the final run
 passed 7/7 (four answers, one abstention, two clarifications). Both runs used
 the labeled public recall fixture, not live NHTSA requests.
-See [the per-case review](m4-live-development.md). There are no held-out evaluation
-results. Offline engineering checks alone are not evidence of model answer quality.
+See [the per-case review](m4-live-development.md). M7 adds the first held-out live
+run, v2 public captures, separate live integration, and strict qualitative review
+in [M7 results](m7-results.md). The quality target is unmet. Offline engineering
+checks alone are not evidence of model answer quality.
 M5 adds offline lifecycle, SDK-boundary, and failure-path verification plus one
 reviewed `recording_fake` trace under `docs/examples/`. That example uses scripted
 answers and fictional shared policies; it makes no live-quality claim. Its run
@@ -68,3 +70,9 @@ metadata is preserved, and generated runs otherwise remain ignored.
 Dependency versions and license references are recorded in `m0-decisions.md`.
 Choose a license for the new project before public release; installing an
 open-source dependency does not choose a license for the application itself.
+
+M7 found no matching credentials in `main` or `origin/main` history. A broader
+local-ref scan found an `.env` copy in local Codex checkpoint objects, outside
+project branch history. The push of `main` did not include these auxiliary refs.
+Reviewed evidence contains no secret values. Exclude `.git` from distributions
+and recordings. See the scoped audit in M7 results.

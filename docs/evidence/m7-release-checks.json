@@ -1,0 +1,20 @@
+{
+  "checked_revision": "5df166d6bd89741424680fcefb6c420e2663b300",
+  "project_commits_reviewed": 8,
+  "local_blobs_scanned": 145,
+  "main_and_origin_main_credential_findings": 0,
+  "local_auxiliary_checkpoint_credential_finding": true,
+  "scope": "Local Codex checkpoint tree objects only; not reachable from main or origin/main. No evidence of public credential exposure from the push of main.",
+  "limitations": "Pattern review is not proof that no unknown credential or private fact exists. Newly authored synthetic corpus/public response provenance was separately reviewed.",
+  "fresh_setup": {
+    "python": "3.12.14",
+    "installed": "built wheel in a fresh environment; sdist data extracted separately",
+    "dependencies_compatible": true,
+    "cli_help": true,
+    "corpus_validation": true,
+    "v2_fixture_validation": true,
+    "scripted_cases_passed": 16,
+    "scripted_cases_total": 16,
+    "credentials_provided": false
+  }
+}

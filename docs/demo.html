@@ -1,0 +1,68 @@
+<!doctype html><html lang="en"><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dealer Evidence Agent — captured execution replay</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101924;color:#e7eff7;font:18px/1.45 system-ui}
+main{max-width:1200px;margin:3vh auto;padding:28px 44px;background:#172637;border-radius:14px}
+.top{display:flex;gap:20px;align-items:center;justify-content:space-between;color:#b6c7d8}
+button{border:0;padding:10px 18px;border-radius:5px;font:inherit;cursor:pointer;
+background:#7edbc4;color:#10202c}
+.label{color:#7edbc4;text-transform:uppercase;letter-spacing:.08em;font-size:15px}
+h1{font-size:38px;line-height:1.15;margin:18px 0}.body{white-space:pre-wrap;font-size:22px}
+section{min-height:600px;padding:28px 0}
+.evidence{white-space:pre-wrap;font:15px/1.5 monospace;color:#aac0d5;margin-top:30px}
+progress{width:100%;height:8px;accent-color:#7edbc4}.note{font-size:14px;color:#aac0d5}
+@media(max-width:700px){main{padding:18px}.body{font-size:18px}h1{font-size:28px}section{min-height:650px}}
+</style><main><div class="top"><span>DEALER EVIDENCE AGENT · REVIEWED REPLAY</span>
+<div><button id="play">Play 110 seconds</button> <button id="reset">Reset</button></div></div>
+<div id="cards"><section data-seconds="10" hidden><p class="label">Captured execution replay</p><h1>Dealer Evidence Agent</h1><div class="body">A bounded LangGraph agent for fictional dealership policies and public recall campaigns. Two tools. One logical tool call. At most two model calls.</div><p class="evidence">Recorded 2026-09-27 • gpt-4.1-mini-2025-04-14 • No calls during playback</p></section>
+<section data-seconds="17" hidden><p class="label">Live held-out case held_007</p><h1>A supported policy answer</h1><div class="body">I typed the wrong customer contact information into a repair order. Can I overwrite the record and send the estimate to the new address?
+
+You should not overwrite the original customer contact information on the repair order. Instead, correct the record by adding a dated amendment that includes the original entry reference, the reason for correction, the corrected information, and your initials. Keep the original entry visible and do not backdate it. Additionally, confirm any changed contact details through the existing recorded contact process before sending visit information to the new address. Notify the assigned advisor if the amendment changes a customer-facing estimate or status.</div><p class="evidence">Citations: shared_record_corrections + shared_customer_contact
+Run: ad471bda8e784861b2e5607806c3bb7b</p></section>
+<section data-seconds="16" hidden><p class="label">Live development demo</p><h1>Technician: restricted question</h1><div class="body">Tell me the exact maximum goodwill credit a service manager can approve.
+
+The supplied evidence does not answer this question.</div><p class="evidence">Identity: tech_demo • Restricted IDs absent from model input
+Run: c95aef6b7eed463ab40c6bb3f387efa4</p></section>
+<section data-seconds="16" hidden><p class="label">Live development demo</p><h1>Manager: the same question</h1><div class="body">Tell me the exact maximum goodwill credit a service manager can approve.
+
+The exact maximum goodwill credit a service manager can approve is $180 per service visit for a documented scheduling or communication mistake.</div><p class="evidence">Identity: manager_demo • Synthetic manager_goodwill_review supplied
+Run: 2e4f344594e64f7d85fca61c6c9c5f1e</p></section>
+<section data-seconds="21" hidden><p class="label">Live OpenAI + live NHTSA</p><h1>Real public recall integration</h1><div class="body">2020 Toyota Corolla: campaigns 19V877000, 20V682000, and 23V865000.
+
+Actual graph execution: 2 model calls, 1 tool call, 1 HTTP attempt, 0 retries.
+
+General campaign records do not establish VIN eligibility, repair completion, or vehicle safety. Missing make/model/year stops lookup and asks for clarification.</div><p class="evidence">Observation: 2026-09-27T14:21:16Z
+Run: 69f9bced48e346b9b581374cbacb3870</p></section>
+<section data-seconds="18" hidden><p class="label">Local red test; hosted red PR pending</p><h1>A real production regression</h1><div class="body">Mutation: can_access(role, doc.visibility) → can_access(role, &#x27;shared&#x27;)
+
+Unchanged retrieval test: FAILED
+Technician results include manager_goodwill_review.
+
+Independent context guard: PASSED. Broken worktree removed.
+M6 hosted baseline: Windows + Ubuntu PASSED.</div><p class="evidence">Passing M5 base: 6ec238d • Hosted M6 base: 5df166d
+The clearly labeled red-PR demonstration is not yet published.</p></section>
+<section data-seconds="12" hidden><p class="label">First held-out pass</p><h1>Measured limits, retained failures</h1><div class="body">Retrieval: 10/10 with all required sources.
+Mechanical graph checks: 20/24. Strict qualitative review: 14/24.
+Unauthorized evidence: 0 violations. Quality targets: NOT MET.
+
+A constrained demonstration, not a production-ready dealership assistant. No prompts or labels were tuned against these results.</div><p class="evidence">Qualitative reviewer: Codex; independent human review pending.
+Full outputs, rubric, failures, hashes, and CI links are in docs/evidence/.</p></section></div><progress id="progress" max="110" value="0"></progress>
+<p class="note"><span id="clock">0 / 110 s</span> · Prepared recording surface,
+not a live execution. Public recording needs the authorized red-PR segment.
+<a style="color:#7edbc4" href="m7-results.md">Results</a></p>
+</main><script>
+const cards=[...document.querySelectorAll('section')];let elapsed=0,last=0,running=false;
+const play=document.getElementById('play');function render(){let start=0;
+cards.forEach((card,index)=>{const end=start+Number(card.dataset.seconds);
+card.hidden=!(elapsed>=start&&(elapsed<end||(elapsed>=110&&index===cards.length-1)));start=end;});
+document.getElementById('progress').value=elapsed;
+document.getElementById('clock').textContent=Math.floor(elapsed)+' / 110 s';}
+function frame(now){if(!running)return;
+elapsed=Math.min(110,elapsed+(now-last)/1000);last=now;render();
+if(elapsed>=110){running=false;play.textContent='Replay';return;}requestAnimationFrame(frame);}
+play.onclick=()=>{if(running){running=false;play.textContent='Resume';return;}
+if(elapsed>=110)elapsed=0;running=true;last=performance.now();play.textContent='Pause';requestAnimationFrame(frame);};
+document.getElementById('reset').onclick=()=>{running=false;elapsed=0;
+play.textContent='Play 110 seconds';render();};render();
+</script></html>

@@ -1,0 +1,47 @@
+{
+  "frozen_at": "2026-09-27T14:16:26.511743+00:00",
+  "model": "gpt-4.1-mini-2025-04-14",
+  "prompt_version": "m4-v2",
+  "code": {
+    "revision": "5df166d6bd89741424680fcefb6c420e2663b300",
+    "working_tree_dirty": false,
+    "source_sha256": "d43efec06b7a0756953bf01216e283dab19affbe8a77be513b027fe1b12ac4d2",
+    "python": "3.12.14",
+    "packages": {
+      "dealer-evidence-agent": "0.1.0.dev0",
+      "openai": "3.19.2",
+      "langgraph": "1.2.12",
+      "httpx": "0.28.1",
+      "rank-bm25": "0.2.2"
+    }
+  },
+  "configuration": {
+    "request_seconds": 65.0,
+    "graph_step_limit": 6,
+    "max_model_calls": 2,
+    "max_tool_calls": 1,
+    "max_retries": 0,
+    "policy_top_k": 4,
+    "recall_limit": 5
+  },
+  "configuration_sha256": "eefce7e5861a73eca20bd499c829b989e6cbbc779f9ab917660b5ffcecf4197c",
+  "file_sha256": {
+    "pyproject.toml": "9d9b6ac3a795c14c0e070fa334cee2547a5ab722d14e0628d21a191dfadd368b",
+    "uv.lock": "13e25169a9b6c54d9daf7ada055329acf208bcf975173cfe4f9fdfbf412283fa",
+    "requirements.lock": "aeef39969cccd46abd9e95a40f747ed701b847b2a662c3d9613e48713a8106c0",
+    "data/manifest.json": "2992ed270269f9e44cd0d29f7cd1c5a7bbbcc17d7dda8d18ff53cfc190c53c1b",
+    "evals/manifest.json": "557dca56a8781af95feaa109152ff26506297dd71e26532294acbf576089ebb1",
+    "evals/development.jsonl": "cf4369bd8bb2637c3d4c5a425e08121293d31746f188f79b979a1a0f1096d6fb",
+    "evals/held_out.jsonl": "966a238b58b0f23f1868505d070755ae9fce1060173d4c8e70aea18f95827aef",
+    "data/recalls/v1/manifest.json": "f4c9b5b4cd8407e27ffcb19e2c273363c65ddf5d4c4ecefd38a38f0704dbcb4b"
+  },
+  "decision": "Freeze before first held-out execution; no prompt, retrieval, corpus, or expected-label tuning from these results.",
+  "manual_rubric": "All required facts, supporting citations, no prohibited claims. Abstention must satisfy required semantics. Clarification identifies missing fields; recall preserves general scope. Unexpected errors fail. Required-fact omissions fail even when mechanically valid.",
+  "targets": {
+    "retrieval_hit_at_4": 0.85,
+    "route_and_arguments": 0.9,
+    "semantic_pass_rate": 0.85,
+    "unauthorized_evidence": 0
+  },
+  "reviewer": "Codex qualitative review; not an independent human review"
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "fixtures": [
+    {
+      "fixture_id": "subaru-outback-2019",
+      "kind": "recorded",
+      "query": {
+        "make": "Subaru",
+        "model": "Outback",
+        "year": 2019
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Subaru&model=Outback&modelYear=2019",
+      "captured_at": "2026-09-27T14:17:41.814815+00:00",
+      "http_status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "transport_error": null,
+      "body_path": "subaru-outback-2019.json",
+      "body_sha256": "9fdf1e8a958e7eb35f18ab5fef3c462b096053669fa3bf8c4f625789f8d717d6",
+      "expected_status": "ok"
+    },
+    {
+      "fixture_id": "hyundai-tucson-2023",
+      "kind": "recorded",
+      "query": {
+        "make": "Hyundai",
+        "model": "Tucson",
+        "year": 2023
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Hyundai&model=Tucson&modelYear=2023",
+      "captured_at": "2026-09-27T14:17:41.934770+00:00",
+      "http_status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "transport_error": null,
+      "body_path": "hyundai-tucson-2023.json",
+      "body_sha256": "3db286b820fc275f88b26c3c36efad253901294915fd5c3ab5e5ef14dc9bc767",
+      "expected_status": "ok"
+    },
+    {
+      "fixture_id": "chevrolet-malibu-2017",
+      "kind": "recorded",
+      "query": {
+        "make": "Chevrolet",
+        "model": "Malibu",
+        "year": 2017
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Chevrolet&model=Malibu&modelYear=2017",
+      "captured_at": "2026-09-27T14:17:41.967633+00:00",
+      "http_status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "transport_error": null,
+      "body_path": "chevrolet-malibu-2017.json",
+      "body_sha256": "32036a703648639f389fc7c081406da06785bfac86098f270187a4cc632152d3",
+      "expected_status": "ok"
+    }
+  ],
+  "fixtures_sha256": "c511b208b2c54edd81a4cb1820fcde0fc08c43c6c50fcdf2c022dbec0e14851e"
+}

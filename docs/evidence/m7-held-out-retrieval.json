@@ -1,0 +1,290 @@
+{
+  "split": "held_out",
+  "retrieval_version": "bm25-okapi-v1",
+  "top_k": 4,
+  "corpus_sha256": "bbdaab8b32afbd6ac22bcfb785cd9add12c7484a7b77397846d2ede5d850dc4e",
+  "cases_sha256": "966a238b58b0f23f1868505d070755ae9fce1060173d4c8e70aea18f95827aef",
+  "hit_at_k": {
+    "passed": 10,
+    "total": 10
+  },
+  "all_sources_at_k": {
+    "passed": 10,
+    "total": 10
+  },
+  "policy_cases": 10,
+  "mean_recall_at_k": 1.0,
+  "mean_reciprocal_rank_at_k": 1.0,
+  "unauthorized_hits": 0,
+  "forbidden_hits": 0,
+  "unknown_identities_rejected": 1,
+  "skipped_cases": 6,
+  "cases": [
+    {
+      "case_id": "held_001",
+      "category": "policy",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_appointment_intake",
+        "shared_loaner_checkout",
+        "shared_status_updates",
+        "shared_customer_contact"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0,
+      "recall_at_k": 1.0,
+      "reciprocal_rank_at_k": 1.0,
+      "hit_at_k": true,
+      "all_sources_at_k": true
+    },
+    {
+      "case_id": "held_002",
+      "category": "policy",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_parts_backorder",
+        "shared_shift_handoff",
+        "shared_status_updates",
+        "shared_record_corrections"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0,
+      "recall_at_k": 1.0,
+      "reciprocal_rank_at_k": 1.0,
+      "hit_at_k": true,
+      "all_sources_at_k": true
+    },
+    {
+      "case_id": "held_003",
+      "category": "policy",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_loaner_checkout",
+        "shared_loaner_return",
+        "shared_shuttle_booking",
+        "shared_complaint_intake"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0,
+      "recall_at_k": 1.0,
+      "reciprocal_rank_at_k": 1.0,
+      "hit_at_k": true,
+      "all_sources_at_k": true
+    },
+    {
+      "case_id": "held_004",
+      "category": "policy",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_after_hours_dropoff",
+        "shared_shift_handoff",
+        "shared_estimate_approval",
+        "shared_recall_questions"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0,
+      "recall_at_k": 1.0,
+      "reciprocal_rank_at_k": 1.0,
+      "hit_at_k": true,
+      "all_sources_at_k": true
+    },
+    {
+      "case_id": "held_005",
+      "category": "policy",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_personal_property",
+        "shared_loaner_return",
+        "shared_customer_contact",
+        "shared_loaner_checkout"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0,
+      "recall_at_k": 1.0,
+      "reciprocal_rank_at_k": 1.0,
+      "hit_at_k": true,
+      "all_sources_at_k": true
+    },
+    {
+      "case_id": "held_006",
+      "category": "policy",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_vehicle_pickup",
+        "shared_loaner_return",
+        "shared_status_updates",
+        "shared_after_hours_dropoff"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0,
+      "recall_at_k": 1.0,
+      "reciprocal_rank_at_k": 1.0,
+      "hit_at_k": true,
+      "all_sources_at_k": true
+    },
+    {
+      "case_id": "held_007",
+      "category": "policy",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_customer_contact",
+        "shared_record_corrections",
+        "shared_estimate_approval",
+        "shared_status_updates"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0,
+      "recall_at_k": 1.0,
+      "reciprocal_rank_at_k": 1.0,
+      "hit_at_k": true,
+      "all_sources_at_k": true
+    },
+    {
+      "case_id": "held_008",
+      "category": "policy",
+      "status": "matches",
+      "retrieved_ids": [
+        "manager_loaner_exception",
+        "shared_loaner_checkout",
+        "manager_audit_review",
+        "manager_vendor_exception"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0,
+      "recall_at_k": 1.0,
+      "reciprocal_rank_at_k": 1.0,
+      "hit_at_k": true,
+      "all_sources_at_k": true
+    },
+    {
+      "case_id": "held_009",
+      "category": "policy",
+      "status": "matches",
+      "retrieved_ids": [
+        "manager_discount_review",
+        "manager_goodwill_review",
+        "manager_audit_review",
+        "manager_access_review"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0,
+      "recall_at_k": 1.0,
+      "reciprocal_rank_at_k": 1.0,
+      "hit_at_k": true,
+      "all_sources_at_k": true
+    },
+    {
+      "case_id": "held_010",
+      "category": "policy",
+      "status": "matches",
+      "retrieved_ids": [
+        "manager_audit_review",
+        "manager_discount_review",
+        "manager_access_review",
+        "manager_escalation_review"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0,
+      "recall_at_k": 1.0,
+      "reciprocal_rank_at_k": 1.0,
+      "hit_at_k": true,
+      "all_sources_at_k": true
+    },
+    {
+      "case_id": "held_011",
+      "category": "permission",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_loaner_return",
+        "shared_complaint_intake",
+        "shared_vehicle_pickup",
+        "shared_loaner_checkout"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0
+    },
+    {
+      "case_id": "held_012",
+      "category": "permission",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_record_corrections",
+        "shared_vehicle_pickup",
+        "shared_status_updates",
+        "shared_appointment_intake"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0
+    },
+    {
+      "case_id": "held_013",
+      "category": "permission",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_complaint_intake",
+        "shared_loaner_return",
+        "shared_parts_backorder",
+        "shared_loaner_checkout"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0
+    },
+    {
+      "case_id": "held_014",
+      "category": "permission",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_loaner_checkout",
+        "shared_customer_contact",
+        "shared_loaner_return",
+        "shared_appointment_intake"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0
+    },
+    {
+      "case_id": "held_015",
+      "category": "missing_evidence",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_loaner_checkout",
+        "shared_loaner_return",
+        "shared_appointment_intake"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0
+    },
+    {
+      "case_id": "held_016",
+      "category": "missing_evidence",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_warranty_questions",
+        "shared_appointment_intake",
+        "manager_goodwill_review",
+        "shared_shuttle_booking"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0
+    },
+    {
+      "case_id": "held_017",
+      "category": "missing_evidence",
+      "status": "matches",
+      "retrieved_ids": [
+        "shared_vehicle_pickup",
+        "shared_after_hours_dropoff",
+        "shared_estimate_approval",
+        "shared_shuttle_booking"
+      ],
+      "unauthorized_count": 0,
+      "forbidden_count": 0
+    },
+    {
+      "case_id": "held_024",
+      "category": "unknown_identity",
+      "rejected": true
+    }
+  ],
+  "limitations": "Retrieval only. Lexical matches do not establish answerability. No routing, factual-answer, abstention, or recall API quality was measured."
+}

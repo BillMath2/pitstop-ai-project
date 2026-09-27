@@ -4,7 +4,7 @@ A Python portfolio project for a fictional dealership: a bounded LangGraph agent
 that chooses between permission-aware policy search and public NHTSA recall
 lookup, then answers with evidence or explains what is missing.
 
-**Current status: M6 complete locally; M7 evaluation and release preparation are next.** The `ask` CLI
+**Current status: M7 evaluated; quality targets are unmet and release work remains.** The `ask` CLI
 runs a bounded LangGraph route/tool/answer flow with permission-scoped policy
 search, public NHTSA recall lookup, typed citations, and model-boundary trace hooks.
 Offline validation passes 332 tests (one existing skip), and all seven cases in
@@ -15,9 +15,19 @@ failures and their fix are preserved in [live results](docs/m4-live-development.
 M6 adds retrieval and graph evaluation reports, offline GitHub Actions, and a
 verified production-code permission regression in an isolated worktree.
 Development retrieval hit@4 is 6/6; scripted graph checks pass 16/16, which is
-execution coverage rather than model quality. Hosted CI has not been run.
+execution coverage rather than model quality. The committed M6 baseline has
+[passing Windows and Ubuntu CI](https://github.com/BillMath2/pitstop-ai-project/actions/runs/36325212649).
 See [M6 results and commands](docs/m6-decisions.md) and the
 [exact regression and cleanup record](docs/regression-demo.md).
+
+M7's first held-out run found all required policy sources (10/10), passed 20/24
+mechanical graph cases, and passed 14/24 under strict Codex qualitative review.
+The 85% answer-quality target is unmet; independent human review remains pending.
+No unauthorized evidence was observed, and the separate live NHTSA graph smoke
+passed. Runtime code and prompts were not tuned after seeing the holdout.
+See [results and failures](docs/m7-results.md), [architecture](docs/architecture.md),
+and the [110-second recording kit](docs/demo.md). The hosted red PR, final video,
+and license choice remain pending.
 
 ```powershell
 .\.venv\Scripts\dealer-evidence.exe evaluate --mode retrieval --output runs/retrieval.json

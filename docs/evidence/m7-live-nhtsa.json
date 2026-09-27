@@ -1,0 +1,255 @@
+{
+  "mode": "live_model_and_live_nhtsa",
+  "question": "Look up general recalls for a 2020 Toyota Corolla.",
+  "identity": "tech_demo",
+  "answer": {
+    "status": "answered",
+    "text": "There are three general recalls for the 2020 Toyota Corolla: 1) Recall 19V877000 for rear seat belt assemblies with a dual-mode locking mechanism that may not lock as intended, potentially increasing injury risk in a crash. Toyota will inspect and replace assemblies as needed free of charge. 2) Recall 20V682000 for a low-pressure fuel pump inside the fuel tank that may fail, causing the engine to stall and increasing crash risk. Toyota will replace the fuel pump assembly free of charge. 3) Recall 23V865000 for a short circuit in the Occupant Classification System sensor that may prevent the front passenger air bag from deploying, increasing injury risk. Dealers will inspect and replace the sensor as necessary free of charge.\n\nSource: live; observed: 2026-09-27T14:21:16.014276+00:00. Showing 3 of 3 returned campaign records. General year/make/model campaign records only. These do not establish VIN-specific eligibility, repair completion, or that a vehicle is safe to drive. An empty result does not prove there are no recalls.",
+    "citations": [
+      {
+        "kind": "recall_campaign",
+        "id": "19V877000",
+        "source": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020"
+      },
+      {
+        "kind": "recall_campaign",
+        "id": "20V682000",
+        "source": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020"
+      },
+      {
+        "kind": "recall_campaign",
+        "id": "23V865000",
+        "source": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020"
+      }
+    ],
+    "run_id": "69f9bced48e346b9b581374cbacb3870",
+    "model_calls": 2,
+    "tool_calls": 1
+  },
+  "trace": {
+    "run_id": "69f9bced48e346b9b581374cbacb3870",
+    "complete": true,
+    "outcome": "answered",
+    "model_attempts": 2,
+    "unconfirmed_attempts": [],
+    "unconfirmed_tools": [],
+    "tool_calls": 1,
+    "usage": {
+      "prompt_tokens": 2138,
+      "completion_tokens": 229,
+      "total_tokens": 2367
+    },
+    "events": [
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 1,
+        "time": "2026-09-27T14:21:14.185257+00:00",
+        "event": "request_started",
+        "code": {
+          "revision": "5df166d6bd89741424680fcefb6c420e2663b300",
+          "working_tree_dirty": true,
+          "source_sha256": "d43efec06b7a0756953bf01216e283dab19affbe8a77be513b027fe1b12ac4d2",
+          "python": "3.12.14",
+          "packages": {
+            "dealer-evidence-agent": "0.1.0.dev0",
+            "openai": "3.19.2",
+            "langgraph": "1.2.12",
+            "httpx": "0.28.1",
+            "rank-bm25": "0.2.2"
+          }
+        },
+        "configuration": {
+          "request_seconds": 65.0,
+          "graph_step_limit": 6,
+          "max_model_calls": 2,
+          "max_tool_calls": 1,
+          "max_retries": 0,
+          "policy_top_k": 4,
+          "recall_limit": 5
+        },
+        "configuration_sha256": "eefce7e5861a73eca20bd499c829b989e6cbbc779f9ab917660b5ffcecf4197c"
+      },
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 2,
+        "time": "2026-09-27T14:21:14.189241+00:00",
+        "event": "identity_validated",
+        "identity": "tech_demo"
+      },
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 3,
+        "time": "2026-09-27T14:21:14.211264+00:00",
+        "event": "request_validated",
+        "identity": "tech_demo",
+        "corpus_sha256": "bbdaab8b32afbd6ac22bcfb785cd9add12c7484a7b77397846d2ede5d850dc4e"
+      },
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 4,
+        "time": "2026-09-27T14:21:14.448664+00:00",
+        "event": "model_request",
+        "stage": "route",
+        "provider": "openai",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "prompt_version": "m4-v2",
+        "request_sha256": "3345fd01984a1cf8b7cd5a3f7637b1d667a978fa280aa3726438fecbbcb2d1a7",
+        "prompt_sha256": "bcec4e2ad008c2a9854fe2d71bec0fb443df4cb4efdfbe373ed75800bda4fa03",
+        "schema_sha256": "8353ccd044c10b0b61f59baf1c7b65e07bd24c72c75efe3491bde0cb9f785b07",
+        "settings": {
+          "temperature": 0,
+          "max_completion_tokens": 1800
+        },
+        "timeout_seconds": 25.0,
+        "evidence": [],
+        "attempt": 1,
+        "retry_count": 0
+      },
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 5,
+        "time": "2026-09-27T14:21:15.778441+00:00",
+        "event": "model_response",
+        "stage": "route",
+        "attempt": 1,
+        "elapsed_seconds": 1.327999999979511,
+        "usage": {
+          "prompt_tokens": 487,
+          "completion_tokens": 26,
+          "total_tokens": 513
+        },
+        "retry_count": 0
+      },
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 6,
+        "time": "2026-09-27T14:21:15.782477+00:00",
+        "event": "route_selected",
+        "action": "lookup_recalls",
+        "arguments_sha256": "44788fa4bb6688476bfbdf819ee021c314a32879fcd3acafd5a09515d799f8fe",
+        "arguments": {
+          "make": "Toyota",
+          "model": "Corolla",
+          "year": 2020
+        }
+      },
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 7,
+        "time": "2026-09-27T14:21:15.785490+00:00",
+        "event": "tool_started",
+        "action": "lookup_recalls",
+        "attempt": 1,
+        "retry_count": 0
+      },
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 8,
+        "time": "2026-09-27T14:21:16.016299+00:00",
+        "event": "tool_completed",
+        "action": "lookup_recalls",
+        "status": "ok",
+        "source": "live",
+        "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020",
+        "body_sha256": "655a4ac092c2335fc415604fed999676a6d5ec1b6554a372ebe9ece9622308be",
+        "total_count": 3,
+        "returned_count": 3,
+        "fixture_id": null,
+        "network_attempts": 1,
+        "observed_at": "2026-09-27T14:21:16.014276+00:00",
+        "http_status": 200,
+        "fixture_sha256": null,
+        "retry_count": 0,
+        "elapsed_seconds": 0.23399999999674037,
+        "evidence_ids": [
+          "19V877000",
+          "20V682000",
+          "23V865000"
+        ]
+      },
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 9,
+        "time": "2026-09-27T14:21:16.021287+00:00",
+        "event": "model_request",
+        "stage": "answer",
+        "provider": "openai",
+        "model": "gpt-4.1-mini-2025-04-14",
+        "prompt_version": "m4-v2",
+        "request_sha256": "5cb941989c4f8dd4c5c1db380d5e7615917dade37f7cd5376c88348a2985eeec",
+        "prompt_sha256": "f13dce65a7fa5b5ec36e97a3d8140d81347a61690fdacc3ebeb9389671123244",
+        "schema_sha256": "a741938105a583cbacd5ac426ce253b11816d2b35675a5328e6c01cf524525d5",
+        "settings": {
+          "temperature": 0,
+          "max_completion_tokens": 1800
+        },
+        "timeout_seconds": 25.0,
+        "evidence": [
+          {
+            "kind": "recall_response",
+            "id": "655a4ac092c2335fc415604fed999676a6d5ec1b6554a372ebe9ece9622308be",
+            "content_sha256": "bf47fe1f58d3ce717e5a13d445f34d8adb331b9afbeaaea094591179ebbbb71b"
+          },
+          {
+            "kind": "recall_campaign",
+            "id": "19V877000",
+            "content_sha256": "6313166677593a0d89b113ba75addaadf37c26b3480e6cd6634facaefa89dd99"
+          },
+          {
+            "kind": "recall_campaign",
+            "id": "20V682000",
+            "content_sha256": "00fcf4f4601291d0c5b3c6dd672ad8e6adec5fc62b30bbc67083c50753218f85"
+          },
+          {
+            "kind": "recall_campaign",
+            "id": "23V865000",
+            "content_sha256": "7d6180876616c25d606d46b894a8c6c1ddda34b301c1e4a8f50cafec45238fc6"
+          }
+        ],
+        "attempt": 1,
+        "retry_count": 0
+      },
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 10,
+        "time": "2026-09-27T14:21:17.751245+00:00",
+        "event": "model_response",
+        "stage": "answer",
+        "attempt": 1,
+        "elapsed_seconds": 1.7339999999967404,
+        "usage": {
+          "prompt_tokens": 1651,
+          "completion_tokens": 203,
+          "total_tokens": 1854
+        },
+        "retry_count": 0
+      },
+      {
+        "trace_version": 1,
+        "run_id": "69f9bced48e346b9b581374cbacb3870",
+        "sequence": 11,
+        "time": "2026-09-27T14:21:17.755285+00:00",
+        "event": "request_finished",
+        "status": "answered",
+        "citation_ids": [
+          "19V877000",
+          "20V682000",
+          "23V865000"
+        ],
+        "model_calls": 2,
+        "tool_calls": 1,
+        "elapsed_seconds": 3.702999999979511
+      }
+    ]
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "baseline_revision": "5df166d6bd89741424680fcefb6c420e2663b300",
+  "model_ids": [
+    "gpt-4.1-mini-2025-04-14"
+  ],
+  "providers": [
+    "openai"
+  ],
+  "prompt_version": "m4-v2",
+  "source_sha256": "d43efec06b7a0756953bf01216e283dab19affbe8a77be513b027fe1b12ac4d2",
+  "cases_sha256": "966a238b58b0f23f1868505d070755ae9fce1060173d4c8e70aea18f95827aef",
+  "corpus_sha256": "bbdaab8b32afbd6ac22bcfb785cd9add12c7484a7b77397846d2ede5d850dc4e",
+  "fixtures_sha256": "c511b208b2c54edd81a4cb1820fcde0fc08c43c6c50fcdf2c022dbec0e14851e",
+  "sample_count": 24,
+  "mechanical_passes": 20,
+  "strict_qualitative_passes": 14,
+  "semantic_target_met": false,
+  "routing_target_met": false,
+  "routing_measure": "effective graph route after deterministic guards, not raw model routing accuracy",
+  "usage": {
+    "prompt_tokens": 26615,
+    "completion_tokens": 2057,
+    "total_tokens": 28672
+  },
+  "model_calls": 39,
+  "tool_calls": 16,
+  "elapsed_seconds": 43.93800000002375,
+  "case_latency_median_seconds": 1.9375,
+  "case_latency_max_seconds": 3.4530000000377186,
+  "by_category": {
+    "clarification": {
+      "total": 3,
+      "mechanical_passes": 3,
+      "strict_qualitative_passes": 3
+    },
+    "missing_evidence": {
+      "total": 3,
+      "mechanical_passes": 3,
+      "strict_qualitative_passes": 1
+    },
+    "permission": {
+      "total": 4,
+      "mechanical_passes": 2,
+      "strict_qualitative_passes": 2
+    },
+    "policy": {
+      "total": 10,
+      "mechanical_passes": 10,
+      "strict_qualitative_passes": 6
+    },
+    "recall": {
+      "total": 3,
+      "mechanical_passes": 1,
+      "strict_qualitative_passes": 1
+    },
+    "unknown_identity": {
+      "total": 1,
+      "mechanical_passes": 1,
+      "strict_qualitative_passes": 1
+    }
+  },
+  "release_status": "quality_targets_not_met; constrained demonstration only; human review and license selection pending",
+  "repeat_policy": "First held-out run retained. No runtime/prompt/corpus/expected-label changes or held-out reruns."
+}
