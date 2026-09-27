@@ -123,7 +123,10 @@ def load_evaluations(
     documents: tuple[PolicyDocument, ...],
     *,
     include_held_out: bool = False,
+    split: str | None = None,
 ) -> tuple[dict, ...]:
+    if split not in (None, "development", "held_out") or (split and include_held_out):
+        raise EvaluationError("Select one split or the explicit integrity check, not both.")
     manifest = _json(_read(manifest_path))
     if not isinstance(manifest, dict) or set(manifest) != {
         "schema_version",
@@ -138,7 +141,11 @@ def load_evaluations(
     splits = manifest["splits"]
     if not isinstance(splits, dict) or set(splits) != {"development", "held_out"}:
         raise EvaluationError("Expected development and held_out splits.")
-    selected = ("development", "held_out") if include_held_out else ("development",)
+    selected = (
+        (split,)
+        if split
+        else (("development", "held_out") if include_held_out else ("development",))
+    )
     cases: list[dict] = []
     seen_ids: set[str] = set()
     seen_queries: set[tuple[str, str]] = set()

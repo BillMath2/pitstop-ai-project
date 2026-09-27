@@ -95,6 +95,15 @@ class ModelClient:
         if self._sdk is not None:
             self._sdk.close()
 
+    def with_recording(self, requests: list[dict]) -> "ModelClient":
+        """Trusted evaluator: capture body copies in memory; caller closes the original client."""
+
+        def create(*, timeout, **body):
+            requests.append(copy.deepcopy(body))
+            return self._create(timeout=timeout, **body)
+
+        return ModelClient(create, model=self.model, provider=self.provider)
+
     def complete(self, body: dict, *, stage: str, deadline: float, trace: Trace) -> dict:
         outgoing = copy.deepcopy(
             {

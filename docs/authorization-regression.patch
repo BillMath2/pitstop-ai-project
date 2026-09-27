@@ -1,0 +1,9 @@
+diff --git a/src/dealer_evidence_agent/permissions.py b/src/dealer_evidence_agent/permissions.py
+--- a/src/dealer_evidence_agent/permissions.py
++++ b/src/dealer_evidence_agent/permissions.py
+@@ -37,4 +37,4 @@ def authorized_documents(
+     documents: tuple[PolicyDocument, ...], identity: str
+ ) -> tuple[PolicyDocument, ...]:
+     role = resolve_role(identity)
+-    return tuple(doc for doc in documents if can_access(role, doc.visibility))
++    return tuple(doc for doc in documents if can_access(role, "shared"))

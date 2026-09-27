@@ -53,7 +53,7 @@ mean there is no required answering evidence, not a ban on citing an authorized
 policy that explains a limitation. Permission denials must not confirm private
 facts guessed in a question or leak them through paraphrases or encodings.
 
-A future runner must keep expected facts and evidence IDs out of model input,
+The M6 runner keeps expected labels out of model instructions and retrieval inputs,
 verify route/outcome and citations, and assess the semantic assertions separately.
 Measure unauthorized evidence in intermediate retrieval/model context as well
 as the final answer. Unknown identities must be rejected before either a model
@@ -76,8 +76,8 @@ mean reciprocal rank@k; all policy, permission, and missing-evidence searches
 are checked for unauthorized and explicitly forbidden document hits. The unknown
 identity case checks rejection. The three recall and two clarification cases are
 skipped by that runner because it measures policy retrieval only. M3 tests
-validate the three development recall argument sets against recorded fixtures;
-there is still no model router or final answer evaluator.
+validate the three development recall argument sets against recorded fixtures.
+M6 adds a separate executed graph runner, described below.
 
 Expected IDs are used only after search to score results; they are never query
 inputs. Missing-evidence and permission cases may return authorized lexical
@@ -86,3 +86,21 @@ document recall establish that a bounded excerpt includes every required fact.
 Intermediate authorization isolation is covered by separate unit tests.
 The JSON report records the corpus hash, development-file hash, retrieval
 version, k, per-case results, and aggregate metrics.
+
+## M6 executed reports
+
+`dealer-evidence evaluate --mode retrieval` defaults to k=4 and development.
+`--mode scripted` uses the explicitly synthetic provider replies under
+`model_replies/`, executes the graph with recorded recalls, and checks observed
+routes, arguments, dispositions, evidence, citations, call bounds, and traces.
+This is contract execution coverage, not a model-quality score. Scripted
+replies are separate from the immutable expected-label files and are never
+substituted into a live-model run.
+
+`--mode live-model` explicitly calls the pinned model with fixture-only recalls.
+Both modes leave semantic grading pending against `required_facts` and
+`forbidden_claims`. Unknown-identity and unexpected-error cases remain in the
+denominator. `--split held_out` is an explicit M7 operation; neither CI nor
+normal tests open the real held-out file. Synthetic unit-test splits verify
+the selection mechanism. Reports under ignored `runs/` are administrator
+artifacts; review before sharing. See [M6 decisions](../docs/m6-decisions.md).

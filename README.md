@@ -4,13 +4,25 @@ A Python portfolio project for a fictional dealership: a bounded LangGraph agent
 that chooses between permission-aware policy search and public NHTSA recall
 lookup, then answers with evidence or explains what is missing.
 
-**Current status: M5 complete; M6 evaluation and CI are next.** The `ask` CLI
+**Current status: M6 complete locally; M7 evaluation and release preparation are next.** The `ask` CLI
 runs a bounded LangGraph route/tool/answer flow with permission-scoped policy
 search, public NHTSA recall lookup, typed citations, and model-boundary trace hooks.
-Offline validation passes 317 tests (one existing skip), and all seven cases in
+Offline validation passes 332 tests (one existing skip), and all seven cases in
 M4's final live OpenAI development smoke pass manual review. The initial routing
 failures and their fix are preserved in [live results](docs/m4-live-development.md) and
 [M4 decisions and remaining work](docs/m4-decisions.md).
+
+M6 adds retrieval and graph evaluation reports, offline GitHub Actions, and a
+verified production-code permission regression in an isolated worktree.
+Development retrieval hit@4 is 6/6; scripted graph checks pass 16/16, which is
+execution coverage rather than model quality. Hosted CI has not been run.
+See [M6 results and commands](docs/m6-decisions.md) and the
+[exact regression and cleanup record](docs/regression-demo.md).
+
+```powershell
+.\.venv\Scripts\dealer-evidence.exe evaluate --mode retrieval --output runs/retrieval.json
+.\.venv\Scripts\dealer-evidence.exe evaluate --mode scripted --output runs/scripted.json
+```
 
 ## Quick start
 

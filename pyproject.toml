@@ -40,6 +40,7 @@ include = [
     "/.env.example",
     "/.python-version",
     "/.gitattributes",
+    "/.github/workflows/ci.yml",
     "/requirements.lock",
     "/uv.lock",
 ]

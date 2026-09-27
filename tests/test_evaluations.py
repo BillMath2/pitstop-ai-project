@@ -120,3 +120,17 @@ def test_explicit_full_validation_with_synthetic_held_out(fixtures):
     rewrite_cases(path, synthetic, "held_out")
     with pytest.raises(EvaluationError, match="Duplicate"):
         load_evaluations(path, documents, include_held_out=True)
+
+
+def test_explicit_split_opens_only_selected_synthetic_file(fixtures):
+    path, documents = fixtures
+    template = load_evaluations(path, documents)[0]
+    synthetic = [
+        dict(template, case_id=f"held_{i:03d}", split="held_out", query=f"Synthetic split test {i}")
+        for i in range(24)
+    ]
+    rewrite_cases(path, synthetic, "held_out")
+    (path.parent / "development.jsonl").unlink()
+    assert len(load_evaluations(path, documents, split="held_out")) == 24
+    with pytest.raises(EvaluationError, match="Select one split"):
+        load_evaluations(path, documents, split="held_out", include_held_out=True)

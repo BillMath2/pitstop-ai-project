@@ -1,10 +1,10 @@
-"""Development-only retrieval metrics; no routing, answer, or held-out evaluation."""
+"""Retrieval metrics with explicit split selection and independent permission scoring."""
 
 from pathlib import Path
 
 from dealer_evidence_agent.corpus import PolicyDocument, corpus_fingerprint, text_fingerprint
 from dealer_evidence_agent.evaluations import load_evaluations
-from dealer_evidence_agent.permissions import AuthorizationError, can_access, resolve_role
+from dealer_evidence_agent.permissions import AuthorizationError, resolve_role
 from dealer_evidence_agent.retrieval import (
     DEFAULT_TOP_K,
     RETRIEVAL_VERSION,
@@ -18,9 +18,10 @@ def evaluate_retrieval(
     eval_manifest: Path,
     *,
     top_k: int = DEFAULT_TOP_K,
+    split: str = "development",
 ) -> dict:
     validate_search("evaluation", top_k)
-    cases = load_evaluations(eval_manifest, documents)
+    cases = load_evaluations(eval_manifest, documents, split=split)
     by_id = {doc.doc_id: doc for doc in documents}
     rows = []
     policy_recalls = []
@@ -49,7 +50,15 @@ def evaluate_retrieval(
         expected = set(case["expected"]["document_ids"])
         forbidden = set(case["expected"]["forbidden_document_ids"]) & set(ids)
         role = resolve_role(case["identity"])
-        unauthorized = [doc_id for doc_id in ids if not can_access(role, by_id[doc_id].visibility)]
+        unauthorized = [
+            doc_id
+            for doc_id in ids
+            if doc_id not in by_id
+            or not (
+                by_id[doc_id].visibility == "shared"
+                or (role == "manager" and by_id[doc_id].visibility == "manager_only")
+            )
+        ]
         unauthorized_count += len(unauthorized)
         forbidden_count += len(forbidden)
         row = {
@@ -67,16 +76,29 @@ def evaluate_retrieval(
             )
             policy_recalls.append(recall)
             reciprocal_ranks.append(reciprocal)
-            row.update(recall_at_k=recall, reciprocal_rank_at_k=reciprocal)
+            row.update(
+                recall_at_k=recall,
+                reciprocal_rank_at_k=reciprocal,
+                hit_at_k=bool(expected & set(ids)),
+                all_sources_at_k=expected <= set(ids),
+            )
         rows.append(row)
     return {
-        "split": "development",
+        "split": split,
         "retrieval_version": RETRIEVAL_VERSION,
         "top_k": top_k,
         "corpus_sha256": corpus_fingerprint(documents),
-        "development_sha256": text_fingerprint(
-            (eval_manifest.parent / "development.jsonl").read_text(encoding="utf-8")
+        "cases_sha256": text_fingerprint(
+            (eval_manifest.parent / f"{split}.jsonl").read_text(encoding="utf-8")
         ),
+        "hit_at_k": {
+            "passed": sum(r.get("hit_at_k", False) for r in rows),
+            "total": len(policy_recalls),
+        },
+        "all_sources_at_k": {
+            "passed": sum(r.get("all_sources_at_k", False) for r in rows),
+            "total": len(policy_recalls),
+        },
         "policy_cases": len(policy_recalls),
         "mean_recall_at_k": sum(policy_recalls) / len(policy_recalls) if policy_recalls else None,
         "mean_reciprocal_rank_at_k": (
@@ -89,6 +111,6 @@ def evaluate_retrieval(
         "cases": rows,
         "limitations": (
             "Retrieval only. Lexical matches do not establish answerability. "
-            "No routing, factual-answer, abstention, recall API, or held-out quality was measured."
+            "No routing, factual-answer, abstention, or recall API quality was measured."
         ),
     }

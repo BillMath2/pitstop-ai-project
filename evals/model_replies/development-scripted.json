@@ -1,0 +1,60 @@
+{
+  "provenance": "synthetic_scripted_not_model_quality",
+  "cases": {
+    "dev_001": [
+      {"decision": {"action": "search_policies", "arguments": {"query": "loaner return missing key"}}},
+      {"status": "answered", "text": "Record the return time, odometer, and key count; mark the return pending review and notify the duty manager. Do not promise a waiver or refund.", "citations": [{"kind": "policy", "id": "shared_loaner_return"}]}
+    ],
+    "dev_002": [
+      {"decision": {"action": "search_policies", "arguments": {"query": "estimate approval additional work"}}},
+      {"status": "answered", "text": "Pause additional work and obtain and record revised customer approval before proceeding.", "citations": [{"kind": "policy", "id": "shared_estimate_approval"}]}
+    ],
+    "dev_003": [
+      {"decision": {"action": "search_policies", "arguments": {"query": "customer status update"}}},
+      {"status": "answered", "text": "Provide an update by 3 p.m. each business day and log the time, channel, and factual status.", "citations": [{"kind": "policy", "id": "shared_status_updates"}]}
+    ],
+    "dev_004": [
+      {"decision": {"action": "search_policies", "arguments": {"query": "courtesy shuttle booking road miles"}}},
+      {"status": "answered", "text": "Seven road miles is within the normal eight-road-mile area. The coordinator must confirm capacity and pickup before a ride is promised.", "citations": [{"kind": "policy", "id": "shared_shuttle_booking"}]}
+    ],
+    "dev_005": [
+      {"decision": {"action": "search_policies", "arguments": {"query": "goodwill review credit approval"}}},
+      {"status": "answered", "text": "The service manager may approve one credit up to $180 per visit. Record the visit reference, reason, amount, and approving manager before communicating a decision. This does not automatically approve the request.", "citations": [{"kind": "policy", "id": "manager_goodwill_review"}]}
+    ],
+    "dev_006": [
+      {"decision": {"action": "search_policies", "arguments": {"query": "duplicate invoice charge refund review"}}},
+      {"status": "answered", "text": "The service manager may approve an invoice correction refund up to $250. Record the invoice reference, duplicate line, amount, reason, and approver before cashier processing.", "citations": [{"kind": "policy", "id": "manager_refund_review"}]}
+    ],
+    "dev_007": [
+      {"decision": {"action": "search_policies", "arguments": {"query": "maximum goodwill credit"}}},
+      {"status": "insufficient_evidence", "text": "The supplied evidence does not establish this limit.", "citations": []}
+    ],
+    "dev_008": [
+      {"decision": {"action": "search_policies", "arguments": {"query": "private labor discount cap"}}},
+      {"status": "insufficient_evidence", "text": "The supplied evidence does not establish this limit.", "citations": []}
+    ],
+    "dev_009": [
+      {"decision": {"action": "search_policies", "arguments": {"query": "hourly labor rate"}}},
+      {"status": "insufficient_evidence", "text": "The supplied evidence does not specify an hourly rate.", "citations": []}
+    ],
+    "dev_010": [
+      {"decision": {"action": "search_policies", "arguments": {"query": "repair orders retained deletion"}}},
+      {"status": "insufficient_evidence", "text": "The supplied evidence does not establish a retention period.", "citations": []}
+    ],
+    "dev_011": [
+      {"decision": {"action": "lookup_recalls", "arguments": {"make": "Toyota", "model": "Corolla", "year": 2020}}},
+      {"status": "answered", "text": "The recorded response lists general campaigns for this year, make, and model. It cannot establish a particular vehicle's repair completion.", "citations": [{"kind": "recall_response", "id": "655a4ac092c2335fc415604fed999676a6d5ec1b6554a372ebe9ece9622308be"}]}
+    ],
+    "dev_012": [
+      {"decision": {"action": "lookup_recalls", "arguments": {"make": "Honda", "model": "Accord", "year": 2018}}},
+      {"status": "answered", "text": "The recorded response lists general campaigns for this year, make, and model. It does not establish VIN-specific eligibility or safety.", "citations": [{"kind": "recall_response", "id": "367260043e263abbc8183c9a190833f1ba004e001d87ebe1653b52cacb5bad8d"}]}
+    ],
+    "dev_013": [
+      {"decision": {"action": "lookup_recalls", "arguments": {"make": "Ford", "model": "Escape", "year": 2022}}},
+      {"status": "answered", "text": "The recorded response lists general campaigns for this year, make, and model. A general lookup cannot establish that your repair was completed.", "citations": [{"kind": "recall_response", "id": "2c6b6a0f124730c29d404efb6f7838b3ea399c551a23d7bf7dddd5e1d44529e8"}]}
+    ],
+    "dev_014": [{"decision": {"action": "needs_clarification", "reason": "missing_vehicle"}}],
+    "dev_015": [{"decision": {"action": "needs_clarification", "reason": "missing_vehicle"}}],
+    "dev_016": []
+  }
+}

@@ -10,7 +10,9 @@ Only newly authored application material belongs in the eventual public repo:
 - Explicitly reviewed synthetic trace examples under `docs/examples/`, labeled with provenance.
 - Synthetic evaluation fixtures and their contract under `evals/`.
 - Reviewed development smoke scripts under `scripts/` (their generated output stays ignored).
-- Later: `.github/workflows/ci.yml`.
+- `.github/workflows/ci.yml` for offline checks.
+- Reviewed regression patch and reproduction record under `docs/`; never a broken production tree.
+- Labeled synthetic model replies under `evals/model_replies/`; never presented as model quality.
 
 Never include `.env`, credentials, local runtimes, virtual environments,
 generated `runs/`, raw debug output, or career/internal planning material.

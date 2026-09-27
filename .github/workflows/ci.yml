@@ -1,0 +1,37 @@
+name: Offline checks
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    env:
+      OPENAI_API_KEY: ""
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: requirements.lock
+      - name: Install pinned dependencies
+        run: python -m pip install -e ".[dev]" -c requirements.lock
+      - run: python -m pip check
+      - run: ruff check .
+      - run: ruff format --check .
+      - name: Offline tests (network calls blocked)
+        run: python -m pytest
+      - name: Development retrieval report
+        run: dealer-evidence evaluate --mode retrieval --output runs/retrieval.json
+      - name: Scripted execution report (not model quality)
+        run: dealer-evidence evaluate --mode scripted --output runs/scripted.json

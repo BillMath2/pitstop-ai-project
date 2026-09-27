@@ -10,6 +10,7 @@ from pathlib import Path
 
 from dealer_evidence_agent.answers import AgentError, Answer
 from dealer_evidence_agent.corpus import CorpusError, corpus_fingerprint, load_corpus
+from dealer_evidence_agent.evaluation import DEFAULT_REPLIES, evaluate_agent
 from dealer_evidence_agent.evaluations import EvaluationError, load_evaluations
 from dealer_evidence_agent.graph import request_metadata, run_agent
 from dealer_evidence_agent.model_client import ModelClient
@@ -180,10 +181,22 @@ def _print_recalls(result: RecallResult, as_json: bool) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="dealer-evidence",
-        description="Dealer Evidence Agent: bounded answers and request-boundary traces (M5).",
+        description="Dealer Evidence Agent: bounded answers, traces, and evaluation reports (M6).",
     )
     parser.add_argument("--version", action="version", version=version("dealer-evidence-agent"))
     commands = parser.add_subparsers(dest="command", required=True)
+    evaluate = commands.add_parser(
+        "evaluate", help="Evaluate a named split; live model is explicit."
+    )
+    evaluate.add_argument("--mode", choices=("retrieval", "scripted", "live-model"), required=True)
+    evaluate.add_argument("--split", choices=("development", "held_out"), default="development")
+    evaluate.add_argument("--eval-manifest", type=Path, default=Path("evals/manifest.json"))
+    evaluate.add_argument("--fixture-manifest", type=Path, default=DEFAULT_FIXTURE_MANIFEST)
+    evaluate.add_argument("--replies", type=Path, default=DEFAULT_REPLIES)
+    evaluate.add_argument("--top-k", type=int, default=4, help="Retrieval-only limit (default 4)")
+    evaluate.add_argument("--runs-dir", type=Path, default=Path("runs/evaluation"))
+    evaluate.add_argument("--env-file", type=Path)
+    evaluate.add_argument("--output", type=Path, help="Save the administrator report as JSON")
     trace = commands.add_parser("trace", help="Inspect one request trace without provider access.")
     trace.add_argument("--run-id", required=True, help="32-character run ID printed by ask")
     trace.add_argument("--runs-dir", type=Path, default=Path("runs"))
@@ -245,7 +258,7 @@ def main(argv: list[str] | None = None) -> int:
         action="store_true",
         help="Explicit authoring/release check of both splits; never use for tuning.",
     )
-    for command in (validate, listing, evaluations, search, retrieval_eval, ask):
+    for command in (validate, listing, evaluations, search, retrieval_eval, ask, evaluate):
         command.add_argument(
             "--manifest",
             type=Path,
@@ -287,6 +300,40 @@ def main(argv: list[str] | None = None) -> int:
         if args.command == "eval-retrieval":
             validate_search("evaluation", args.top_k)
         documents = load_corpus(args.manifest)
+        if args.command == "evaluate":
+            if args.mode == "retrieval":
+                report = evaluate_retrieval(
+                    documents, args.eval_manifest, top_k=args.top_k, split=args.split
+                )
+                passed = (
+                    report["unauthorized_hits"] == report["forbidden_hits"] == 0
+                    and all(r.get("rejected", True) for r in report["cases"])
+                    and report["all_sources_at_k"]["passed"] == report["all_sources_at_k"]["total"]
+                )
+            else:
+                report = evaluate_agent(
+                    documents,
+                    args.eval_manifest,
+                    mode=args.mode,
+                    split=args.split,
+                    runs_dir=args.runs_dir,
+                    env_file=args.env_file,
+                    replies_path=args.replies,
+                    fixture_manifest=args.fixture_manifest,
+                )
+                passed = report["automatic_passes"] == report["case_count"]
+            output = json.dumps(report, ensure_ascii=False, indent=2, allow_nan=False)
+            if args.output:
+                try:
+                    args.output.parent.mkdir(parents=True, exist_ok=True)
+                    args.output.write_text(output + "\n", encoding="utf-8")
+                except OSError as exc:
+                    raise EvaluationError("Cannot write evaluation report.") from exc
+                print(f"Report: {args.output}")
+                print(report["limitations"])
+            else:
+                print(output)
+            return 0 if passed else 1
         if args.command == "search-policies":
             result = PolicySearch(documents, identity=args.identity).search_policies(
                 args.query, top_k=args.top_k
