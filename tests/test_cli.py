@@ -144,3 +144,141 @@ def test_retrieval_evaluation_has_no_held_out_option():
     with pytest.raises(SystemExit) as exc:
         main(["eval-retrieval", "--include-held-out"])
     assert exc.value.code == 2
+
+
+def test_recall_replay_json_needs_no_policy_manifest(capsys, monkeypatch, tmp_path):
+    fixture_path = Path(__file__).resolve().parents[1] / "data/recalls/v1/manifest.json"
+    monkeypatch.chdir(tmp_path)
+    assert (
+        main(
+            [
+                "lookup-recalls",
+                "--identity",
+                "tech_demo",
+                "--make",
+                "Toyota",
+                "--model",
+                "Corolla",
+                "--year",
+                "2020",
+                "--fixture",
+                "toyota-corolla-2020",
+                "--fixture-manifest",
+                str(fixture_path),
+                "--json",
+            ]
+        )
+        == 0
+    )
+    result = json.loads(capsys.readouterr().out)
+    assert result["source"] == "recorded_fixture" and result["network_attempts"] == 0
+    assert result["total_count"] == 3
+
+
+@pytest.mark.parametrize(
+    ("fixture_id", "exit_code", "status"),
+    [
+        ("synthetic-empty", 0, "empty"),
+        ("synthetic-timeout", 1, "timeout"),
+        ("synthetic-rate-limit", 1, "http_error"),
+    ],
+)
+def test_recall_status_exit_codes(fixture_id, exit_code, status, capsys, monkeypatch):
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    assert (
+        main(
+            [
+                "lookup-recalls",
+                "--identity",
+                "tech_demo",
+                "--make",
+                "Toyota",
+                "--model",
+                "Corolla",
+                "--year",
+                "2020",
+                "--fixture",
+                fixture_id,
+                "--json",
+            ]
+        )
+        == exit_code
+    )
+    result = json.loads(capsys.readouterr().out)
+    assert result["status"] == status and result["source"] == "synthetic_fixture"
+
+
+def test_recall_text_labels_replay_and_truncation(capsys, monkeypatch):
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    assert (
+        main(
+            [
+                "lookup-recalls",
+                "--identity",
+                "manager_demo",
+                "--make",
+                "Honda",
+                "--model",
+                "Accord",
+                "--year",
+                "2018",
+                "--fixture",
+                "honda-accord-2018",
+                "--limit",
+                "1",
+            ]
+        )
+        == 0
+    )
+    output = capsys.readouterr().out
+    assert "offline replay, not a current lookup" in output
+    assert "Showing 1 of 6" in output and "truncated" in output
+    assert "VIN-specific" in output
+
+
+def test_recalls_require_explicit_source_mode():
+    with pytest.raises(SystemExit) as exc:
+        main(
+            [
+                "lookup-recalls",
+                "--identity",
+                "tech_demo",
+                "--make",
+                "Toyota",
+                "--model",
+                "Corolla",
+                "--year",
+                "2020",
+            ]
+        )
+    assert exc.value.code == 2
+
+
+def test_recall_unknown_identity_before_live_client(capsys, monkeypatch):
+    import httpx
+
+    monkeypatch.setattr(httpx, "Client", lambda **kwargs: pytest.fail("Network client created"))
+    assert (
+        main(
+            [
+                "lookup-recalls",
+                "--identity",
+                "guest",
+                "--make",
+                "Toyota",
+                "--model",
+                "Corolla",
+                "--year",
+                "2020",
+                "--live",
+            ]
+        )
+        == 1
+    )
+    assert "Unknown demo identity" in capsys.readouterr().err
+
+
+def test_recall_fixture_validation_command(capsys, monkeypatch):
+    monkeypatch.chdir(Path(__file__).resolve().parents[1])
+    assert main(["validate-recall-fixtures"]) == 0
+    assert json.loads(capsys.readouterr().out)["fixtures"] == 9

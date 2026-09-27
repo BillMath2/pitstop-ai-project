@@ -2,8 +2,9 @@
 
 These are synthetic inputs and expected behaviors, not recorded agent results.
 The manifest binds them to the exact corpus content and metadata fingerprint.
-All policy facts are fictional. Recall cases assert routing/argument behavior
-only; there are no NHTSA responses or claims about actual campaigns here.
+All policy facts are fictional. Recall cases here assert routing/argument behavior
+only. M3 response/error fixtures live separately under `data/recalls/v1/`; they do
+not change this frozen split or provide final agent-answer quality scores.
 
 ## Split discipline
 
@@ -59,7 +60,7 @@ as the final answer. Unknown identities must be rejected before either a model
 or data-tool call. `none` means no data tool is appropriate for clarification;
 it does not forbid a model from asking the clarification question.
 
-Recall `lookup` cases stop at routing and arguments in M1. M3 must add separately
+Recall `lookup` cases stop at routing and arguments in M1. M3 supplies separately
 versioned response fixtures and error/empty-result checks; M4 must verify answers
 against those responses before reporting end-to-end recall quality. No recall
 result, VIN eligibility, repair completion, or safety conclusion may be invented.
@@ -74,7 +75,9 @@ no held-out option. Six policy cases contribute to mean document recall@k and
 mean reciprocal rank@k; all policy, permission, and missing-evidence searches
 are checked for unauthorized and explicitly forbidden document hits. The unknown
 identity case checks rejection. The three recall and two clarification cases are
-skipped because M2 has no router or recall tool.
+skipped by that runner because it measures policy retrieval only. M3 tests
+validate the three development recall argument sets against recorded fixtures;
+there is still no model router or final answer evaluator.
 
 Expected IDs are used only after search to score results; they are never query
 inputs. Missing-evidence and permission cases may return authorized lexical

@@ -1,4 +1,4 @@
-"""Offline entry point; only implemented commands are advertised."""
+"""CLI with explicit live recall access and offline policy/fixture commands."""
 
 import argparse
 import json
@@ -10,6 +10,18 @@ from pathlib import Path
 from dealer_evidence_agent.corpus import CorpusError, corpus_fingerprint, load_corpus
 from dealer_evidence_agent.evaluations import EvaluationError, load_evaluations
 from dealer_evidence_agent.permissions import AuthorizationError, authorized_documents, resolve_role
+from dealer_evidence_agent.recall_fixtures import (
+    DEFAULT_FIXTURE_MANIFEST,
+    RecallFixtureError,
+    replay_recalls,
+    validate_recall_fixtures,
+)
+from dealer_evidence_agent.recalls import (
+    DEFAULT_LIMIT,
+    RecallInputError,
+    RecallLookup,
+    RecallResult,
+)
 from dealer_evidence_agent.retrieval import (
     DEFAULT_TOP_K,
     PolicySearch,
@@ -19,16 +31,71 @@ from dealer_evidence_agent.retrieval import (
 from dealer_evidence_agent.retrieval_evaluation import evaluate_retrieval
 
 
+def _print_recalls(result: RecallResult, as_json: bool) -> None:
+    if as_json:
+        print(json.dumps(asdict(result), ensure_ascii=False, indent=2, allow_nan=False))
+        return
+    print(f"Recall lookup: {result.status} | source: {result.source}")
+    print(f"Source URL: {result.source_url}")
+    if result.observed_at is not None:
+        print(f"Observed at: {result.observed_at}")
+    if result.fixture_id is not None:
+        print(f"Fixture: {result.fixture_id} (offline replay, not a current lookup)")
+    if result.body_sha256 is not None:
+        print(f"Response SHA-256: {result.body_sha256}")
+    if result.error:
+        print(result.error)
+    elif result.status == "empty":
+        print("No records were returned for this combination.")
+    else:
+        print(f"Showing {len(result.records)} of {result.total_count} campaign records.")
+        if result.truncated:
+            print("Results are truncated; this is not the complete response.")
+        for record in result.records:
+            print(f"\n{record.campaign_number} | {record.component}")
+            print(f"Report received (source date): {record.report_received_date}")
+            print(f"Summary: {record.summary}")
+            print(f"Consequence: {record.consequence or 'Not supplied'}")
+            print(f"Remedy: {record.remedy or 'Not supplied'}")
+            print(
+                f"Source flags: parkIt={record.park_it}, parkOutSide={record.park_outside}, "
+                f"overTheAirUpdate={record.over_the_air_update}"
+            )
+    print(result.boundary)
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="dealer-evidence",
-        description="Dealer Evidence Agent: offline permission-scoped policy search (M2).",
+        description="Dealer Evidence Agent: policy search and public recall evidence (M3).",
     )
     parser.add_argument("--version", action="version", version=version("dealer-evidence-agent"))
     commands = parser.add_subparsers(dest="command", required=True)
     validate = commands.add_parser("validate-corpus", help="Validate policy metadata and files.")
     listing = commands.add_parser("list-policies", help="List policies visible to a demo identity.")
     listing.add_argument("--identity", required=True, help="tech_demo or manager_demo")
+    recalls = commands.add_parser("lookup-recalls", help="Look up general NHTSA recall campaigns.")
+    recalls.add_argument("--identity", required=True, help="tech_demo or manager_demo")
+    recalls.add_argument("--make", required=True)
+    recalls.add_argument("--model", required=True)
+    recalls.add_argument("--year", required=True, type=int)
+    recalls.add_argument(
+        "--limit", type=int, default=DEFAULT_LIMIT, help="Records: 1 to 10 (default 5)"
+    )
+    recalls.add_argument("--json", action="store_true")
+    mode = recalls.add_mutually_exclusive_group(required=True)
+    mode.add_argument(
+        "--live", action="store_true", help="Make one request to the public NHTSA API"
+    )
+    mode.add_argument("--fixture", help="Replay a recorded or synthetic fixture ID without network")
+    recalls.add_argument("--fixture-manifest", type=Path, default=DEFAULT_FIXTURE_MANIFEST)
+    recall_validation = commands.add_parser(
+        "validate-recall-fixtures",
+        help="Check recall fixture integrity and replay statuses offline.",
+    )
+    recall_validation.add_argument(
+        "--fixture-manifest", type=Path, default=DEFAULT_FIXTURE_MANIFEST
+    )
     search = commands.add_parser("search-policies", help="Search authorized policies with BM25.")
     search.add_argument("query", help="Policy question (up to 1000 characters)")
     search.add_argument("--identity", required=True, help="tech_demo or manager_demo")
@@ -59,6 +126,28 @@ def main(argv: list[str] | None = None) -> int:
         )
     args = parser.parse_args(argv)
     try:
+        if args.command == "lookup-recalls":
+            resolve_role(args.identity)
+            if args.live:
+                result = RecallLookup(identity=args.identity).lookup_recalls(
+                    args.make, args.model, args.year, limit=args.limit
+                )
+            else:
+                result = replay_recalls(
+                    args.fixture_manifest,
+                    args.fixture,
+                    identity=args.identity,
+                    make=args.make,
+                    model=args.model,
+                    year=args.year,
+                    limit=args.limit,
+                )
+            _print_recalls(result, args.json)
+            return 0 if result.status in {"ok", "empty"} else 1
+        if args.command == "validate-recall-fixtures":
+            report = validate_recall_fixtures(args.fixture_manifest)
+            print(json.dumps(report, indent=2))
+            return 0
         if args.command in {"list-policies", "search-policies"}:
             resolve_role(args.identity)
         if args.command == "search-policies":
@@ -103,7 +192,13 @@ def main(argv: list[str] | None = None) -> int:
     except CorpusError as exc:
         print(f"Corpus validation failed: {exc}", file=sys.stderr)
         return 1
-    except (AuthorizationError, EvaluationError, SearchError) as exc:
+    except (
+        AuthorizationError,
+        EvaluationError,
+        SearchError,
+        RecallInputError,
+        RecallFixtureError,
+    ) as exc:
         print(f"{type(exc).__name__}: {exc}", file=sys.stderr)
         return 1
     shared = sum(document.visibility == "shared" for document in documents)

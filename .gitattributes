@@ -1,0 +1,2 @@
+# Recall response bodies use exact-byte fingerprints; preserve captured bytes.
+data/recalls/v1/*.json -text

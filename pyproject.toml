@@ -38,6 +38,7 @@ include = [
     "/pyproject.toml",
     "/.env.example",
     "/.python-version",
+    "/.gitattributes",
     "/requirements.lock",
     "/uv.lock",
 ]

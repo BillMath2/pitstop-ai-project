@@ -1,0 +1,159 @@
+{
+  "schema_version": 1,
+  "fixtures": [
+    {
+      "fixture_id": "toyota-corolla-2020",
+      "kind": "recorded",
+      "query": {
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2020
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020",
+      "captured_at": "2026-09-27T01:52:20.442970+00:00",
+      "http_status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "transport_error": null,
+      "body_path": "toyota-corolla-2020.json",
+      "body_sha256": "655a4ac092c2335fc415604fed999676a6d5ec1b6554a372ebe9ece9622308be",
+      "expected_status": "ok"
+    },
+    {
+      "fixture_id": "honda-accord-2018",
+      "kind": "recorded",
+      "query": {
+        "make": "Honda",
+        "model": "Accord",
+        "year": 2018
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Honda&model=Accord&modelYear=2018",
+      "captured_at": "2026-09-27T01:52:20.475367+00:00",
+      "http_status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "transport_error": null,
+      "body_path": "honda-accord-2018.json",
+      "body_sha256": "367260043e263abbc8183c9a190833f1ba004e001d87ebe1653b52cacb5bad8d",
+      "expected_status": "ok"
+    },
+    {
+      "fixture_id": "ford-escape-2022",
+      "kind": "recorded",
+      "query": {
+        "make": "Ford",
+        "model": "Escape",
+        "year": 2022
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Ford&model=Escape&modelYear=2022",
+      "captured_at": "2026-09-27T01:52:20.514304+00:00",
+      "http_status": 200,
+      "content_type": "application/json;charset=UTF-8",
+      "transport_error": null,
+      "body_path": "ford-escape-2022.json",
+      "body_sha256": "2c6b6a0f124730c29d404efb6f7838b3ea399c551a23d7bf7dddd5e1d44529e8",
+      "expected_status": "ok"
+    },
+    {
+      "fixture_id": "synthetic-empty",
+      "kind": "synthetic",
+      "query": {
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2020
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020",
+      "captured_at": null,
+      "http_status": 200,
+      "content_type": "application/json",
+      "transport_error": null,
+      "body_path": "synthetic-empty.json",
+      "body_sha256": "74147c27e8c00a68fa4708025f0aa95a3dbb3bea68b4d5417efb2bef19d1e786",
+      "expected_status": "empty"
+    },
+    {
+      "fixture_id": "synthetic-malformed",
+      "kind": "synthetic",
+      "query": {
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2020
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020",
+      "captured_at": null,
+      "http_status": 200,
+      "content_type": "application/json",
+      "transport_error": null,
+      "body_path": "synthetic-malformed.json",
+      "body_sha256": "d7aeddb6d7f6999d468f23bef79fb0de030b72b6f6e10ab9e78a0b133619aae2",
+      "expected_status": "invalid_response"
+    },
+    {
+      "fixture_id": "synthetic-rate-limit",
+      "kind": "synthetic",
+      "query": {
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2020
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020",
+      "captured_at": null,
+      "http_status": 429,
+      "content_type": "application/json",
+      "transport_error": null,
+      "body_path": "synthetic-rate-limit.json",
+      "body_sha256": "5320db3f9d9c2529590efdce113672e407fdebaa67ca74a2f5b3baf6e047e3c3",
+      "expected_status": "http_error"
+    },
+    {
+      "fixture_id": "synthetic-unavailable",
+      "kind": "synthetic",
+      "query": {
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2020
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020",
+      "captured_at": null,
+      "http_status": 503,
+      "content_type": "application/json",
+      "transport_error": null,
+      "body_path": "synthetic-unavailable.json",
+      "body_sha256": "cc1ff8a480110b088f0615be564eea062abe295cb0793a2982fcb696ebdd66fa",
+      "expected_status": "http_error"
+    },
+    {
+      "fixture_id": "synthetic-timeout",
+      "kind": "synthetic",
+      "query": {
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2020
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020",
+      "captured_at": null,
+      "http_status": null,
+      "content_type": null,
+      "transport_error": "timeout",
+      "body_path": null,
+      "body_sha256": null,
+      "expected_status": "timeout"
+    },
+    {
+      "fixture_id": "synthetic-network",
+      "kind": "synthetic",
+      "query": {
+        "make": "Toyota",
+        "model": "Corolla",
+        "year": 2020
+      },
+      "source_url": "https://api.nhtsa.gov/recalls/recallsByVehicle?make=Toyota&model=Corolla&modelYear=2020",
+      "captured_at": null,
+      "http_status": null,
+      "content_type": null,
+      "transport_error": "network_error",
+      "body_path": null,
+      "body_sha256": null,
+      "expected_status": "network_error"
+    }
+  ],
+  "fixtures_sha256": "499b9afe3e39294e675cc8862eac1584cb8be9dbe52ce38149d1cbc88134a36d"
+}

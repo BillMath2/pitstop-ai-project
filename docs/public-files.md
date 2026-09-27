@@ -2,9 +2,10 @@
 
 Only newly authored application material belongs in the eventual public repo:
 
-- `README.md`, `pyproject.toml`, `.python-version`, `.gitignore`, `.env.example`.
+- `README.md`, `pyproject.toml`, `.python-version`, `.gitignore`, `.gitattributes`, `.env.example`.
 - Dependency locks: `uv.lock` and `requirements.lock`.
-- `src/dealer_evidence_agent/`, `tests/`, and synthetic `data/`.
+- `src/dealer_evidence_agent/`, `tests/`, and synthetic policies under `data/`.
+- Public NHTSA response captures and labeled synthetic fixtures under `data/recalls/`.
 - Reviewed project documentation under `docs/`.
 - Synthetic evaluation fixtures and their contract under `evals/`.
 - Later: `.github/workflows/ci.yml`.

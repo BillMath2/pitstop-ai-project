@@ -4,11 +4,11 @@ A Python portfolio project for a fictional dealership: a bounded LangGraph agent
 that will choose between permission-aware policy search and public NHTSA recall
 lookup, then answer with evidence or explain what is missing.
 
-**Current status: M2 permission-scoped retrieval.** The offline CLI searches the
-24 fictional policies with BM25, enforcing demo permissions before indexing and
-returning source excerpts with fingerprints. Corpus/fixture validation and a
-development-only retrieval evaluation also work. Recall lookup, model routing,
-request traces, and end-to-end answer evaluation are still planned.
+**Current status: M3 public recall lookup.** The CLI searches 24 fictional
+policies with permission-scoped BM25 and looks up general NHTSA campaigns by
+year/make/model. Recorded recall responses and synthetic failure fixtures support
+offline replay. Model routing, request traces, and end-to-end answer evaluation
+are still planned.
 
 ## Quick start
 
@@ -24,6 +24,7 @@ py -3.12 -m venv .venv
 .\.venv\Scripts\dealer-evidence.exe validate-evals
 .\.venv\Scripts\dealer-evidence.exe search-policies "loaner return missing keys" --identity tech_demo
 .\.venv\Scripts\dealer-evidence.exe eval-retrieval
+.\.venv\Scripts\dealer-evidence.exe validate-recall-fixtures
 .\.venv\Scripts\python.exe -m pytest
 .\.venv\Scripts\ruff.exe check .
 .\.venv\Scripts\ruff.exe format --check .
@@ -34,7 +35,8 @@ If you use [uv](https://docs.astral.sh/uv/getting-started/installation/),
 locked dependencies. Then use the same executable paths above, or
 `uv run --locked dealer-evidence validate-corpus`.
 
-No credentials or external service calls are needed for the current CLI or tests.
+No credentials are needed. Tests, policy search, and fixture replay run offline;
+only recall lookup with explicit `--live` makes an external service call.
 The default manifest is `data/manifest.json`, relative to the working directory;
 use `validate-corpus --manifest PATH` to validate another corpus. Policy paths
 are relative to the `corpus/` directory next to that manifest. The corpus stays
@@ -69,6 +71,33 @@ rank 1 in the M2 baseline. Permission checks returned no restricted evidence.
 These are development results, not held-out, answer-quality, or routing results.
 See [M2 decisions and verification](docs/m2-decisions.md).
 
+## Recall lookup
+
+Replay a captured response without a network connection:
+
+```powershell
+.\.venv\Scripts\dealer-evidence.exe lookup-recalls --identity tech_demo --make Toyota --model Corolla --year 2020 --fixture toyota-corolla-2020
+```
+
+Make one public request to NHTSA:
+
+```powershell
+.\.venv\Scripts\dealer-evidence.exe lookup-recalls --identity tech_demo --make Toyota --model Corolla --year 2020 --live --json
+```
+
+Choose `--live` or `--fixture ID` explicitly. Both demo identities can use this
+public tool; unknown identities fail before network or fixture access. Up to five
+records are displayed by default (`--limit` accepts 1..10). The response states
+the full count and whether output is truncated, plus source URL, observation
+time, and response fingerprint. Fixture replay is labeled `recorded_fixture` or
+`synthetic_fixture`; it never falls back to a live call.
+
+An empty result is distinct from timeout, HTTP, network, oversized, or malformed
+response errors. Neither a campaign nor an empty result establishes a particular
+VIN's eligibility, repair completion, or safety. Recorded responses describe the
+capture time, not current recall status. Source text is evidence, not instructions.
+See [M3 decisions](docs/m3-decisions.md) and [recall fixture provenance](data/recalls/README.md).
+
 ## Planned agent behavior
 
 The model will select `search_policies(query)` or
@@ -95,13 +124,14 @@ These are selectable local test identities, **not authentication**. Anyone with
 the repository can read the fictional policies. Retrieval uses the authorized
 document set before tokenization, indexing, scoring, or generating snippets.
 
-Policies, amounts, and procedures are invented for this project. Future NHTSA
-year/make/model results will describe general recall records, not VIN-specific
+Policies, amounts, and procedures are invented for this project. NHTSA
+year/make/model results describe general recall records, not VIN-specific
 repair status or proof that a vehicle is safe. This is a new personal project,
 written independently from public documentation and its own requirements.
 
 See [data provenance](docs/data-provenance.md),
 [the intended public file set](docs/public-files.md),
 [M0 decisions and verification](docs/m0-decisions.md),
-[M1 decisions and verification](docs/m1-decisions.md), and
-[M2 decisions and verification](docs/m2-decisions.md).
+[M1 decisions and verification](docs/m1-decisions.md),
+[M2 decisions and verification](docs/m2-decisions.md), and
+[M3 decisions and verification](docs/m3-decisions.md).

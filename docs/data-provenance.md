@@ -29,28 +29,33 @@ application authorization behavior, not login, tenant isolation, or production
 security. The local application and manifest are trusted; questions, retrieved
 text, model output, and future API responses are untrusted.
 
-## Future recall data
+## Public recall data
 
-No NHTSA responses have been collected yet. M3 will capture public recall
-responses with source URLs, query fields, UTC capture times, and fingerprints.
-Synthetic error fixtures will be labeled separately. Recorded fixtures will
-never be presented as live results. Reference:
+M3 captured three public NHTSA year/make/model responses for the existing
+development cases. `data/recalls/v1/manifest.json` records source URLs, query
+fields, UTC capture times, HTTP metadata, and exact response-byte fingerprints.
+The local capture date was 2026-09-26 (2026-09-27 UTC). Six synthetic fixtures
+cover empty, malformed, HTTP failure, timeout, and network-error responses.
+Synthetic data has no claimed capture time. Recorded fixtures are always labeled
+as offline replay; raw bytes are preserved with Git attributes. Reference:
 [NHTSA datasets and APIs](https://www.nhtsa.gov/nhtsa-datasets-and-apis).
 
 ## Evaluation fixtures
 
 The 40 cases in `evals/` are newly authored synthetic questions and expected
 behaviors. They are frozen against the M1 corpus, with 16 development cases and
-24 held-out cases in separate files. Recall queries use example vehicle fields
-but assert no real campaigns, recall counts, eligibility, or repair status.
-M1 validates routing expectations and fixture integrity, not API responses.
+24 held-out cases in separate files. The M1 recall cases specify example vehicle
+fields and routing expectations; they remain unchanged. M3 adds independently
+versioned response/error fixtures under `data/recalls/`, not held-out answers.
+These do not establish individual eligibility or repair status.
 See [the fixture contract](../evals/README.md) for isolation and scoring rules.
 
 ## Results and licenses
 
-M2 has development-only retrieval metrics; there are no agent-answer-quality or
-held-out evaluation results. Installation, offline validation, and document
-retrieval checks are not evidence of model answer quality.
+M2 has development-only retrieval metrics; M3 has live tool smoke verification
+and offline response-contract checks. There are no agent-answer-quality or
+held-out evaluation results. These engineering checks are not evidence of model
+answer quality.
 Dependency versions and license references are recorded in `m0-decisions.md`.
 Choose a license for the new project before public release; installing an
 open-source dependency does not choose a license for the application itself.
