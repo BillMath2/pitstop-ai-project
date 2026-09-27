@@ -28,10 +28,29 @@ from dealer_evidence_agent.tools import (
     validate_arguments,
     vehicle_is_explicit,
 )
-from dealer_evidence_agent.tracing import Trace
+from dealer_evidence_agent.tracing import Trace, code_metadata, fingerprint
 
 REQUEST_SECONDS = 65.0
 GRAPH_STEP_LIMIT = 6
+
+
+def request_metadata() -> dict:
+    configuration = {
+        "request_seconds": REQUEST_SECONDS,
+        "graph_step_limit": GRAPH_STEP_LIMIT,
+        "max_model_calls": 2,
+        "max_tool_calls": 1,
+        "max_retries": 0,
+        "policy_top_k": 4,
+        "recall_limit": 5,
+    }
+    return {
+        "code": code_metadata(),
+        "configuration": configuration,
+        "configuration_sha256": fingerprint(configuration),
+    }
+
+
 TERMINALS = {
     "missing_vehicle": "Please supply one vehicle's make, model, and four-digit model year.",
     "ambiguous_request": "Please specify one unambiguous task and one vehicle make/model/year.",
@@ -66,8 +85,9 @@ def run_agent(
     trace: Trace,
     search: PolicySearch | None = None,
     recall_lookup: Callable | None = None,
+    finalize_trace: bool = True,
 ) -> AgentResult:
-    """Injected tools are trusted test dependencies, never choices exposed to the model."""
+    """Injected tools are trusted dependencies. CLI owns lifecycle when finalize_trace=False."""
     started = time.monotonic()
     deadline = started + REQUEST_SECONDS
     counts = {"model": 0, "tool": 0}
@@ -117,7 +137,12 @@ def run_agent(
             if action == "lookup_recalls" and not vehicle_is_explicit(question, arguments):
                 return terminal("needs_clarification", "missing_vehicle")
             # Policy query text is deliberately not logged: it can echo raw user text.
-            trace.emit("route_selected", action=action)
+            trace.emit(
+                "route_selected",
+                action=action,
+                arguments_sha256=fingerprint(arguments),
+                arguments=arguments if action == "lookup_recalls" else {"query_redacted": True},
+            )
             return {"action": action, "arguments": arguments}
         if set(decision) != {"action", "reason"}:
             reject("invalid_terminal_decision")
@@ -142,6 +167,8 @@ def run_agent(
         if action == "lookup_recalls" and deadline - time.monotonic() < REQUEST_BUDGET_SECONDS:
             raise AgentError("request_deadline_exceeded")
         counts["tool"] += 1
+        tool_started = time.monotonic()
+        trace.emit("tool_started", action=action, attempt=1, retry_count=0)
         if action == "search_policies":
             engine = search if search is not None else PolicySearch(documents, identity=identity)
             found = engine.search_policies(args["query"], top_k=4)
@@ -151,6 +178,10 @@ def run_agent(
                 action=action,
                 status=found.status,
                 evidence_ids=[e.citation.id for e in evidence],
+                retrieval_version=found.retrieval_version,
+                scope_sha256=found.scope_sha256,
+                retry_count=0,
+                elapsed_seconds=time.monotonic() - tool_started,
             )
             if not evidence:
                 return {
@@ -171,6 +202,12 @@ def run_agent(
             returned_count=len(result.records),
             fixture_id=result.fixture_id,
             network_attempts=result.network_attempts,
+            observed_at=result.observed_at,
+            http_status=result.http_status,
+            fixture_sha256=result.fixture_sha256,
+            retry_count=0,
+            elapsed_seconds=time.monotonic() - tool_started,
+            evidence_ids=[r.campaign_number for r in result.records],
         )
         if result.status not in ("ok", "empty"):
             raise AgentError("recall_service_error")
@@ -223,7 +260,8 @@ def run_agent(
         return {"answer": answer}
 
     try:
-        trace.emit("request_started")
+        if finalize_trace:
+            trace.emit("request_started", **request_metadata())
         try:
             resolve_role(identity)
             validate_search(question, 4)
@@ -231,9 +269,10 @@ def run_agent(
             raise AgentError("invalid_identity") from exc
         except SearchError as exc:
             raise AgentError("invalid_question") from exc
-        trace.emit(
-            "request_validated", identity=identity, corpus_sha256=corpus_fingerprint(documents)
-        )
+        if finalize_trace:
+            trace.emit(
+                "request_validated", identity=identity, corpus_sha256=corpus_fingerprint(documents)
+            )
         builder = StateGraph(AgentState)
         builder.add_node("route", route)
         builder.add_node("execute", execute)
@@ -245,21 +284,27 @@ def run_agent(
         state = builder.compile().invoke({}, {"recursion_limit": GRAPH_STEP_LIMIT})
         check_time()
         answer = state["answer"]
-        trace.emit(
-            "request_finished",
-            status=answer.status,
-            model_calls=counts["model"],
-            tool_calls=counts["tool"],
-            citation_ids=[c.id for c in answer.citations],
-            elapsed_seconds=time.monotonic() - started,
-        )
+        if finalize_trace:
+            trace.emit(
+                "request_finished",
+                status=answer.status,
+                model_calls=counts["model"],
+                tool_calls=counts["tool"],
+                citation_ids=[c.id for c in answer.citations],
+                elapsed_seconds=time.monotonic() - started,
+            )
         return AgentResult(answer, counts["model"], counts["tool"], state.get("evidence", ()))
     except Exception as exc:
         code = str(exc) if isinstance(exc, AgentError) else "internal_error"
         try:
-            trace.emit(
-                "request_failed", error=code, model_calls=counts["model"], tool_calls=counts["tool"]
-            )
+            if finalize_trace:
+                trace.emit(
+                    "request_failed",
+                    error=code,
+                    model_calls=counts["model"],
+                    tool_calls=counts["tool"],
+                    elapsed_seconds=time.monotonic() - started,
+                )
         except Exception:
             code = "trace_write_failed"
         return AgentResult(

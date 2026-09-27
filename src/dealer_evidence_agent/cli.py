@@ -3,6 +3,7 @@
 import argparse
 import json
 import sys
+import time
 from dataclasses import asdict
 from importlib.metadata import version
 from pathlib import Path
@@ -10,7 +11,7 @@ from pathlib import Path
 from dealer_evidence_agent.answers import AgentError, Answer
 from dealer_evidence_agent.corpus import CorpusError, corpus_fingerprint, load_corpus
 from dealer_evidence_agent.evaluations import EvaluationError, load_evaluations
-from dealer_evidence_agent.graph import run_agent
+from dealer_evidence_agent.graph import request_metadata, run_agent
 from dealer_evidence_agent.model_client import ModelClient
 from dealer_evidence_agent.permissions import AuthorizationError, authorized_documents, resolve_role
 from dealer_evidence_agent.recall_fixtures import (
@@ -32,16 +33,23 @@ from dealer_evidence_agent.retrieval import (
     validate_search,
 )
 from dealer_evidence_agent.retrieval_evaluation import evaluate_retrieval
-from dealer_evidence_agent.tracing import JsonlTrace
+from dealer_evidence_agent.tracing import JsonlTrace, inspect_trace
 
 
 def _ask(args) -> int:
     client = trace = result = None
+    started = time.monotonic()
+    error_code = None
     try:
+        trace = JsonlTrace(args.runs_dir)
+        trace.emit("request_started", **request_metadata())
         resolve_role(args.identity)
+        trace.emit("identity_validated", identity=args.identity)
         validate_search(args.query, 4)
         documents = load_corpus(args.manifest)
-        trace = JsonlTrace(args.runs_dir)
+        trace.emit(
+            "request_validated", identity=args.identity, corpus_sha256=corpus_fingerprint(documents)
+        )
         client = ModelClient.from_environment(args.env_file)
         result = run_agent(
             args.query,
@@ -49,24 +57,49 @@ def _ask(args) -> int:
             documents=documents,
             model=client,
             trace=trace,
+            finalize_trace=False,
         )
         answer = result.answer
+        error_code = result.error_code
     except (AgentError, AuthorizationError, SearchError, CorpusError) as exc:
-        code = str(exc) if isinstance(exc, AgentError) else type(exc).__name__
-        answer = Answer("error", f"Request setup failed: {code}.")
-        if trace is not None:
-            try:
-                trace.emit("request_failed", error=code)
-            except AgentError:
-                answer = Answer("error", "Request failed: trace_write_failed.")
+        error_code = str(exc) if isinstance(exc, AgentError) else type(exc).__name__
+        answer = Answer("error", f"Request setup failed: {error_code}.")
+    except Exception:
+        error_code = "internal_error"
+        answer = Answer("error", "Request setup failed: internal_error.")
     finally:
         if client is not None:
-            client.close()
-        if trace is not None:
             try:
-                trace.close()
+                client.close()
+            except Exception:
+                error_code = "provider_close_failed"
+                answer = Answer("error", "Request failed: provider_close_failed.")
+    if trace is not None:
+        counts = {
+            "model_calls": result.model_calls if result else 0,
+            "tool_calls": result.tool_calls if result else 0,
+            "elapsed_seconds": time.monotonic() - started,
+        }
+        try:
+            if error_code:
+                trace.emit("request_failed", error=error_code, **counts)
+            else:
+                trace.emit(
+                    "request_finished",
+                    status=answer.status,
+                    citation_ids=[c.id for c in answer.citations],
+                    **counts,
+                )
+        except AgentError:
+            answer = Answer("error", "Request failed: trace_write_failed.")
+            try:
+                trace.emit("request_failed", error="trace_write_failed", **counts)
             except AgentError:
-                answer = Answer("error", "Request failed: trace_write_failed.")
+                pass
+        try:
+            trace.close()
+        except AgentError:
+            answer = Answer("error", "Request failed: trace_write_failed.")
     output = {**asdict(answer), "run_id": trace.run_id if trace else None}
     if result is not None:
         output.update(model_calls=result.model_calls, tool_calls=result.tool_calls)
@@ -83,6 +116,32 @@ def _ask(args) -> int:
         for item in output.get("evidence", []):
             print(f"\n{item['citation']['id']}\n{item['content']}")
     return 1 if answer.status == "error" else 0
+
+
+def _trace(args) -> int:
+    try:
+        report = inspect_trace(args.runs_dir, args.run_id)
+    except AgentError as exc:
+        print(f"Trace inspection failed: {exc}.", file=sys.stderr)
+        return 1
+    if args.json:
+        print(json.dumps(report, ensure_ascii=False, indent=2))
+    else:
+        print(f"Run {report['run_id']}: {report['outcome']}")
+        print(f"Complete: {report['complete']} | model attempts: {report['model_attempts']}")
+        print(f"Provider-reported usage: {json.dumps(report['usage'])}")
+        for event in report["events"]:
+            print(
+                f"{event['sequence']:02d} {event['event']} "
+                f"{event.get('stage', event.get('action', ''))}"
+            )
+            for evidence in event.get("evidence", []):
+                print(f"   {evidence['kind']}:{evidence['id']} {evidence['content_sha256']}")
+        if not report["complete"]:
+            print("Incomplete trace: no terminal event was recorded.")
+        if report["unconfirmed_attempts"]:
+            print(f"Unconfirmed provider attempts: {report['unconfirmed_attempts']}")
+    return 0 if report["complete"] else 1
 
 
 def _print_recalls(result: RecallResult, as_json: bool) -> None:
@@ -121,10 +180,16 @@ def _print_recalls(result: RecallResult, as_json: bool) -> None:
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(
         prog="dealer-evidence",
-        description="Dealer Evidence Agent: bounded policy and public recall answers (M4).",
+        description="Dealer Evidence Agent: bounded answers and request-boundary traces (M5).",
     )
     parser.add_argument("--version", action="version", version=version("dealer-evidence-agent"))
     commands = parser.add_subparsers(dest="command", required=True)
+    trace = commands.add_parser("trace", help="Inspect one request trace without provider access.")
+    trace.add_argument("--run-id", required=True, help="32-character run ID printed by ask")
+    trace.add_argument("--runs-dir", type=Path, default=Path("runs"))
+    trace.add_argument(
+        "--json", action="store_true", help="Show validated trace events and summary"
+    )
     ask = commands.add_parser("ask", help="Ask the live model; recall routing calls NHTSA live.")
     ask.add_argument("query", help="One question, up to 1000 characters")
     ask.add_argument("--identity", required=True, help="tech_demo or manager_demo")
@@ -190,6 +255,8 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
     if args.command == "ask":
         return _ask(args)
+    if args.command == "trace":
+        return _trace(args)
     try:
         if args.command == "lookup-recalls":
             resolve_role(args.identity)

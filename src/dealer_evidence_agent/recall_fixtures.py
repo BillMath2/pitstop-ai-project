@@ -3,7 +3,7 @@
 import hashlib
 import json
 import re
-from dataclasses import asdict
+from dataclasses import asdict, replace
 from datetime import datetime, timedelta
 from pathlib import Path
 
@@ -169,7 +169,7 @@ def replay_recalls(
         query.year,
     ):
         raise RecallFixtureError("Fixture vehicle does not match the requested vehicle.")
-    return _replay(path, record, limit)
+    return replace(_replay(path, record, limit), fixture_sha256=fixture_fingerprint(list(records)))
 
 
 def validate_recall_fixtures(path: Path) -> dict:

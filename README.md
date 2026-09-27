@@ -4,11 +4,11 @@ A Python portfolio project for a fictional dealership: a bounded LangGraph agent
 that chooses between permission-aware policy search and public NHTSA recall
 lookup, then answers with evidence or explains what is missing.
 
-**Current status: M4 complete; M5 tracing is next.** The `ask` CLI
+**Current status: M5 complete; M6 evaluation and CI are next.** The `ask` CLI
 runs a bounded LangGraph route/tool/answer flow with permission-scoped policy
 search, public NHTSA recall lookup, typed citations, and model-boundary trace hooks.
-Offline validation passes 279 tests (one existing skip), and all seven cases in
-the final live OpenAI development smoke pass manual review. The initial routing
+Offline validation passes 317 tests (one existing skip), and all seven cases in
+M4's final live OpenAI development smoke pass manual review. The initial routing
 failures and their fix are preserved in [live results](docs/m4-live-development.md) and
 [M4 decisions and remaining work](docs/m4-decisions.md).
 
@@ -138,15 +138,29 @@ final seven-case development check produced four supported answers, one appropri
 abstention, and two clarifications. It is not held-out validation or a general
 answer-quality estimate.
 
-`ask` writes ignored `runs/<run_id>.jsonl` files with ordered graph events and
-evidence IDs/content hashes derived from the final SDK request. Routine traces
+`ask` writes versioned, ignored `runs/<run_id>.jsonl` files beginning before
+request setup. They contain ordered graph events, code/configuration fingerprints,
+tool provenance, and evidence IDs/content hashes derived from the final SDK request. Routine traces
 omit message bodies, questions, credentials, and upstream error text. `--show-evidence`
 explicitly displays authorized source content in CLI output. The seven-case
 development smoke in `scripts/m4_smoke.py` uses the live model with labeled,
 recorded NHTSA evidence; it never opens held-out cases or calls NHTSA live.
 
-Full request audit metadata, a trace-inspection CLI, reviewed trace examples,
-end-to-end evaluation, and the production-code regression/CI demo are later work.
+Inspect a request without provider access:
+
+```powershell
+.\.venv\Scripts\dealer-evidence.exe trace --run-id <run-id>
+.\.venv\Scripts\dealer-evidence.exe trace --run-id <run-id> --json
+.\.venv\Scripts\dealer-evidence.exe trace --runs-dir docs/examples --run-id e79271e8fcfc412eabfbb634c06c8b49
+```
+
+The last command opens a reviewed **offline scripted example**, not live model
+quality evidence. The inspector identifies incomplete traces and unconfirmed
+attempts; it rejects malformed/versionless files. Policy-query text is redacted
+with an argument fingerprint; validated recall fields remain readable. Writes
+are flushed and synced before execution continues; trace failures return errors.
+See [M5 decisions and limits](docs/m5-decisions.md). End-to-end evaluation and
+the production-code regression/CI demo remain later work.
 
 ## Demo boundaries
 
@@ -168,4 +182,5 @@ See [data provenance](docs/data-provenance.md),
 [M1 decisions and verification](docs/m1-decisions.md),
 [M2 decisions and verification](docs/m2-decisions.md), and
 [M3 decisions and verification](docs/m3-decisions.md), and
-[M4 decisions and verification](docs/m4-decisions.md).
+[M4 decisions and verification](docs/m4-decisions.md), and
+[M5 decisions and verification](docs/m5-decisions.md).

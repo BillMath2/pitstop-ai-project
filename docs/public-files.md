@@ -7,6 +7,7 @@ Only newly authored application material belongs in the eventual public repo:
 - `src/dealer_evidence_agent/`, `tests/`, and synthetic policies under `data/`.
 - Public NHTSA response captures and labeled synthetic fixtures under `data/recalls/`.
 - Reviewed project documentation under `docs/`.
+- Explicitly reviewed synthetic trace examples under `docs/examples/`, labeled with provenance.
 - Synthetic evaluation fixtures and their contract under `evals/`.
 - Reviewed development smoke scripts under `scripts/` (their generated output stays ignored).
 - Later: `.github/workflows/ci.yml`.

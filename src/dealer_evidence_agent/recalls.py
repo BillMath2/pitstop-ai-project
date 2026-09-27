@@ -72,6 +72,7 @@ class RecallResult:
     error: str | None
     fixture_id: str | None = None
     boundary: str = BOUNDARY
+    fixture_sha256: str | None = None
 
 
 def validate_query(make: str, model: str, year: int, limit: int = DEFAULT_LIMIT) -> VehicleQuery:

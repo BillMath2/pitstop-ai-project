@@ -2,7 +2,6 @@
 
 import copy
 import hashlib
-import json
 import os
 import time
 from collections.abc import Callable
@@ -13,15 +12,13 @@ from openai import APIError, OpenAI
 
 from dealer_evidence_agent.answers import AgentError, parse_json
 from dealer_evidence_agent.prompts import PROMPT_VERSION
-from dealer_evidence_agent.tracing import Trace
+from dealer_evidence_agent.tracing import Trace, fingerprint
 
 DEFAULT_MODEL = "gpt-4.1-mini-2025-04-14"
 
 
 def digest(value: object) -> str:
-    return hashlib.sha256(
-        json.dumps(value, sort_keys=True, ensure_ascii=False, separators=(",", ":")).encode()
-    ).hexdigest()
+    return fingerprint(value)
 
 
 def configuration(env_file: Path | None = None) -> tuple[str, str]:
@@ -126,6 +123,13 @@ class ModelClient:
             model=self.model,
             prompt_version=PROMPT_VERSION,
             request_sha256=digest(outgoing),
+            prompt_sha256=digest([m for m in outgoing["messages"] if m["role"] == "system"]),
+            schema_sha256=digest(outgoing.get("response_format")),
+            settings={
+                "temperature": outgoing["temperature"],
+                "max_completion_tokens": outgoing["max_completion_tokens"],
+            },
+            timeout_seconds=min(25.0, remaining),
             evidence=evidence,
             attempt=1,
             retry_count=0,
@@ -141,11 +145,13 @@ class ModelClient:
                 retry_count=0,
                 error_type=type(exc).__name__,
                 http_status=getattr(exc, "status_code", None),
+                attempt=1,
+                elapsed_seconds=time.monotonic() - started,
             )
             raise AgentError("provider_error") from exc
-        if not isinstance(response, dict):
+        if not isinstance(response, dict) and callable(getattr(response, "model_dump", None)):
             response = response.model_dump()
-        usage = response.get("usage")
+        usage = response.get("usage") if isinstance(response, dict) else None
         safe_usage = {
             key: usage[key]
             for key in ("prompt_tokens", "completion_tokens", "total_tokens")
@@ -154,12 +160,15 @@ class ModelClient:
         trace.emit(
             "model_response",
             stage=stage,
+            attempt=1,
             elapsed_seconds=time.monotonic() - started,
-            usage=safe_usage,
+            **({"usage": safe_usage} if safe_usage else {}),
             retry_count=0,
         )
         if time.monotonic() >= deadline:
             raise AgentError("request_deadline_exceeded")
+        if not isinstance(response, dict):
+            raise AgentError("invalid_model_output")
         choices = response.get("choices")
         if not isinstance(choices, list) or len(choices) != 1:
             raise AgentError("invalid_model_output")

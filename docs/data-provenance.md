@@ -61,6 +61,10 @@ passed 7/7 (four answers, one abstention, two clarifications). Both runs used
 the labeled public recall fixture, not live NHTSA requests.
 See [the per-case review](m4-live-development.md). There are no held-out evaluation
 results. Offline engineering checks alone are not evidence of model answer quality.
+M5 adds offline lifecycle, SDK-boundary, and failure-path verification plus one
+reviewed `recording_fake` trace under `docs/examples/`. That example uses scripted
+answers and fictional shared policies; it makes no live-quality claim. Its run
+metadata is preserved, and generated runs otherwise remain ignored.
 Dependency versions and license references are recorded in `m0-decisions.md`.
 Choose a license for the new project before public release; installing an
 open-source dependency does not choose a license for the application itself.

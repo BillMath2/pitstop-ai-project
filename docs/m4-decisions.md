@@ -108,6 +108,9 @@ environment proxies/redirects are disabled. Errors omit raw SDK messages and key
 
 ## M4 trace hooks versus remaining M5 work
 
+Historical M4 handoff: the gaps below are now completed by
+[M5 request-boundary tracing](m5-decisions.md).
+
 M4 supplies an in-memory recording sink plus minimal ignored JSONL files. The
 adapter derives evidence IDs and exact content hashes from the final SDK body
 immediately before invocation; the full canonical request is also hashed. Tests
