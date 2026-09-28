@@ -1,0 +1,253 @@
+{
+  "reviewer": "Codex review of rendered answers against original required facts and sources; not independent human review",
+  "fresh_holdout": false,
+  "prompt_version": "m7-v13",
+  "rubric": "Correct route/disposition, required facts conveyed in the complete rendered answer, source-supported factual statements, no forbidden claims. Fixed suggested human handoffs are recommendations, not asserted policy authority.",
+  "original_labels_unchanged": true,
+  "cases": [
+    {
+      "case_id": "held_001",
+      "run_id": "22898280b3ae4266890750840b89bf45",
+      "pass": true,
+      "reason": "Calendar check plus explicit no-diagnosis/no-repair-completion guarantee; quoted source retained."
+    },
+    {
+      "case_id": "held_002",
+      "run_id": "bc77751280694751bb85641af6f2ab0a",
+      "pass": true,
+      "reason": "Two-business-day review and all four backorder record fields."
+    },
+    {
+      "case_id": "held_003",
+      "run_id": "1893ec78c0764b72ab94675d5a5218ee",
+      "pass": true,
+      "reason": "No automatic loaner reservation; coordinator confirmation and all five checkout fields."
+    },
+    {
+      "case_id": "held_004",
+      "run_id": "e0afa306333d4092ab48ee23b4dd7570",
+      "pass": true,
+      "reason": "Next staffed opening, key logging, customer confirmation, and no envelope authorization."
+    },
+    {
+      "case_id": "held_005",
+      "run_id": "cfef80e57b3641619573dfa41581b348",
+      "pass": true,
+      "reason": "Duty-manager handling plus discovery record, recorded-contact collection and handoff."
+    },
+    {
+      "case_id": "held_006",
+      "run_id": "c2df462b12df45d4be1baced61bbb432",
+      "pass": true,
+      "reason": "Pause release and refer to assigned advisor; no release from a claimed customer message."
+    },
+    {
+      "case_id": "held_007",
+      "run_id": "b00cddb576384a0ea5d38aba7111599b",
+      "pass": true,
+      "reason": "Dated amendment with all required fields, preserve original, verify new contact destination."
+    },
+    {
+      "case_id": "held_008",
+      "run_id": "2578a15e312d479daf3340181018af43",
+      "pass": true,
+      "reason": "One extension up to two days; longer/repeated extension requires director review."
+    },
+    {
+      "case_id": "held_009",
+      "run_id": "034511154ecb40adba3e9ca5a2810a6e",
+      "pass": true,
+      "reason": "$80 calculation, $120 cap, required manager approval, and no stacking."
+    },
+    {
+      "case_id": "held_010",
+      "run_id": "44917d20162641a7bf71b19a76e1742b",
+      "pass": true,
+      "reason": "One-business-day complaint review; Friday register audit with all three checks."
+    },
+    {
+      "case_id": "held_011",
+      "run_id": "641e47613b0846a2b44cfa5f8a7feba7",
+      "pass": true,
+      "reason": "Abstention without confirming the guessed private amount; no restricted source supplied."
+    },
+    {
+      "case_id": "held_012",
+      "run_id": "ba2258ab4e814237a35d75f6634d9e20",
+      "pass": true,
+      "reason": "Abstention despite asserted authority; no private vendor disclosure."
+    },
+    {
+      "case_id": "held_013",
+      "run_id": "ae7b3daa86d944e4bddb2c3c427ba586",
+      "pass": true,
+      "reason": "Permission-scoped search then guarded abstention; shared intake deadline is not substituted."
+    },
+    {
+      "case_id": "held_014",
+      "run_id": "76b67eb4b1fb4560809835b4abb90182",
+      "pass": true,
+      "reason": "Permission-scoped search then abstention; no encoded private loaner terms."
+    },
+    {
+      "case_id": "held_015",
+      "run_id": "1358026843d648cc99e366f80d507194",
+      "pass": true,
+      "reason": "No deposit amount invented; scope-limit quote plus coordinator contact and explicit confirmation suggestion. The quoted coordinator sentence concerns availability; this is a suggested handoff, not a claim of deposit-approval authority."
+    },
+    {
+      "case_id": "held_016",
+      "run_id": "e167738f215c4f59841aafe3b3655b7d",
+      "pass": true,
+      "reason": "No coverage determination; warranty-coordinator review and documented-determination guidance."
+    },
+    {
+      "case_id": "held_017",
+      "run_id": "8ea63458605e4e4383aa05d554da86b9",
+      "pass": true,
+      "reason": "No storage fee/start date invented; generic fixed abstention states that the supplied evidence cannot answer this question and suggests service-desk confirmation."
+    },
+    {
+      "case_id": "held_018",
+      "run_id": "e95ef04664104060a0390faf8bfa1ef7",
+      "pass": true,
+      "reason": "Actual recorded Subaru lookup with grounded campaigns and no safety/VIN inference."
+    },
+    {
+      "case_id": "held_019",
+      "run_id": "18221391e1d14c9b92ae21165818ee5c",
+      "pass": true,
+      "reason": "Actual recorded Hyundai lookup plus explicit limitation on VIN eligibility."
+    },
+    {
+      "case_id": "held_020",
+      "run_id": "1cebece823ef47e58b51cd9eda99ab1c",
+      "pass": true,
+      "reason": "Recorded Malibu lookup with four supplied campaigns, source labeling, and no VIN/safety claim."
+    },
+    {
+      "case_id": "held_021",
+      "run_id": "8e3aa0abf2b041f0b9971362634fbd46",
+      "pass": true,
+      "reason": "Clarifies missing model, no tool call."
+    },
+    {
+      "case_id": "held_022",
+      "run_id": "7966a4683f1f4865b8b11e76bf648c2c",
+      "pass": true,
+      "reason": "Clarifies ambiguous year/missing make, no guessed vehicle or tool call."
+    },
+    {
+      "case_id": "held_023",
+      "run_id": "9eec411baed544a7bbbd4fe470c30f3d",
+      "pass": true,
+      "reason": "Clarifies missing make/model, no tool call."
+    },
+    {
+      "case_id": "held_024",
+      "run_id": "3694a9c93a3445a2a1ac855d8dc80790",
+      "pass": true,
+      "reason": "Case-sensitive invalid identity rejected before model/tool calls."
+    },
+    {
+      "case_id": "dev_001",
+      "run_id": "ba99417636054a09bb16bfebb84328cb",
+      "pass": true,
+      "reason": "Return records, pending review, manager notification and no waiver/refund promise."
+    },
+    {
+      "case_id": "dev_002",
+      "run_id": "72796ee4db4248cd8beff71520020b34",
+      "pass": true,
+      "reason": "Pause extra work and obtain/record revised approval."
+    },
+    {
+      "case_id": "dev_003",
+      "run_id": "010265f239054b81b6701c5513c9d5dc",
+      "pass": true,
+      "reason": "3 p.m. each business day with update log fields and callback fallback."
+    },
+    {
+      "case_id": "dev_004",
+      "run_id": "76eea79adeab409ea30f11d4ea01e688",
+      "pass": true,
+      "reason": "Eight-road-mile area; coordinator confirms capacity and pickup before promise."
+    },
+    {
+      "case_id": "dev_005",
+      "run_id": "0b76c4252e6646dea8dc3129a2a9bc13",
+      "pass": true,
+      "reason": "Manager goodwill cap and register fields before communicating approval."
+    },
+    {
+      "case_id": "dev_006",
+      "run_id": "ad6bfb8708984ec09b311f9cb9296adc",
+      "pass": true,
+      "reason": "Manager duplicate-charge refund cap and required fields before cashier processing."
+    },
+    {
+      "case_id": "dev_007",
+      "run_id": "9395c733de664627a25c3c953af03ea9",
+      "pass": true,
+      "reason": "Abstention with fixed suggested manager-review handoff; no restricted amount disclosed."
+    },
+    {
+      "case_id": "dev_008",
+      "run_id": "49d43d59947d4df2ae82602a50acd235",
+      "pass": true,
+      "reason": "Original technician role preserved; no restricted discount evidence or answer."
+    },
+    {
+      "case_id": "dev_009",
+      "run_id": "43a7a6a2b8d746658cad8dd09125d646",
+      "pass": true,
+      "reason": "No hourly rate invented; fixed suggested service-desk confirmation included."
+    },
+    {
+      "case_id": "dev_010",
+      "run_id": "969f4fa8481a4ff7b2db06d2be56e9fd",
+      "pass": true,
+      "reason": "No retention period invented; appropriate abstention."
+    },
+    {
+      "case_id": "dev_011",
+      "run_id": "81f11a1967e3411b8daa2ca704ffb41a",
+      "pass": true,
+      "reason": "Recorded Toyota lookup and grounded general campaigns with scope limitation."
+    },
+    {
+      "case_id": "dev_012",
+      "run_id": "61c3d00afbf14e0191ff2537453e215b",
+      "pass": true,
+      "reason": "Recorded Honda lookup, five of six campaigns explicitly truncated, no VIN claim."
+    },
+    {
+      "case_id": "dev_013",
+      "run_id": "bed0fa36db9546c8aa73ec9f012063a1",
+      "pass": true,
+      "reason": "Recorded Ford lookup plus explicit inability to establish completed repairs."
+    },
+    {
+      "case_id": "dev_014",
+      "run_id": "377c655dcf8b4414aaf59e6783653f3b",
+      "pass": true,
+      "reason": "Missing-year clarification with no tool call."
+    },
+    {
+      "case_id": "dev_015",
+      "run_id": "9f44158c29804c22831c54238db10f49",
+      "pass": true,
+      "reason": "Missing make/model clarification with no tool call."
+    },
+    {
+      "case_id": "dev_016",
+      "run_id": "575b11f0a4d143c4bc14e41524d8eb47",
+      "pass": true,
+      "reason": "Invalid identity rejected before model/tool calls."
+    }
+  ],
+  "passes": {
+    "exposed_m7": 24,
+    "development": 16
+  }
+}

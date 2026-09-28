@@ -40,10 +40,15 @@ def route(name="search_policies", **arguments):
     )
 
 
-def final(status="answered", text="Record the return time and key count.", refs=None):
+def final(
+    status="answered", text="Record the return time and key count.", refs=None, requirements=None
+):
     if refs is None:
         refs = [{"kind": "policy", "id": "shared_loaner_return"}]
-    return completion({"content": json.dumps({"status": status, "text": text, "citations": refs})})
+    value = {"status": status, "text": text, "citations": refs}
+    if requirements is not None:
+        value["policy_requirements"] = requirements
+    return completion({"content": json.dumps(value)})
 
 
 @pytest.fixture

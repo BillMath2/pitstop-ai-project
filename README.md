@@ -4,10 +4,10 @@ A Python portfolio project for a fictional dealership: a bounded LangGraph agent
 that chooses between permission-aware policy search and public NHTSA recall
 lookup, then answers with evidence or explains what is missing.
 
-**Current status: M7 evaluated; quality targets are unmet and release work remains.** The `ask` CLI
+**Current status: known M7 quality failures repaired; fresh validation and release work remain.** The `ask` CLI
 runs a bounded LangGraph route/tool/answer flow with permission-scoped policy
 search, public NHTSA recall lookup, typed citations, and model-boundary trace hooks.
-Offline validation passes 332 tests (one existing skip), and all seven cases in
+Offline validation passes 389 tests (one existing skip), and all seven cases in
 M4's final live OpenAI development smoke pass manual review. The initial routing
 failures and their fix are preserved in [live results](docs/m4-live-development.md) and
 [M4 decisions and remaining work](docs/m4-decisions.md).
@@ -22,12 +22,20 @@ See [M6 results and commands](docs/m6-decisions.md) and the
 
 M7's first held-out run found all required policy sources (10/10), passed 20/24
 mechanical graph cases, and passed 14/24 under strict Codex qualitative review.
-The 85% answer-quality target is unmet; independent human review remains pending.
+That first run did not meet the 85% answer-quality target.
 No unauthorized evidence was observed, and the separate live NHTSA graph smoke
-passed. Runtime code and prompts were not tuned after seeing the holdout.
+passed. Runtime code and prompts were frozen for that first evaluation.
 See [results and failures](docs/m7-results.md), [architecture](docs/architecture.md),
 and the [110-second recording kit](docs/demo.md). The hosted red PR, final video,
 and license choice remain pending.
+
+The September 28 repairs improve policy completeness, preserve source-backed
+referrals during abstention, and correct recall-scope routing and permission-topic
+handling. Final live OpenAI regression passes **24/24 exposed M7 cases and 16/16
+development cases**, both mechanically and in Codex review of the rendered answers.
+These are tuned-on cases, not fresh held-out evidence or independent human review.
+Original results and labels are preserved. See [quality fixes, evidence, and test
+commands](docs/m7-quality-fixes.md) for all iterations and remaining validation.
 
 ```powershell
 .\.venv\Scripts\dealer-evidence.exe evaluate --mode retrieval --output runs/retrieval.json
@@ -181,8 +189,8 @@ quality evidence. The inspector identifies incomplete traces and unconfirmed
 attempts; it rejects malformed/versionless files. Policy-query text is redacted
 with an argument fingerprint; validated recall fields remain readable. Writes
 are flushed and synced before execution continues; trace failures return errors.
-See [M5 decisions and limits](docs/m5-decisions.md). End-to-end evaluation and
-the production-code regression/CI demo remain later work.
+See [M5 decisions and limits](docs/m5-decisions.md) and the subsequent
+[M6 evaluation and regression/CI work](docs/m6-decisions.md).
 
 ## Demo boundaries
 

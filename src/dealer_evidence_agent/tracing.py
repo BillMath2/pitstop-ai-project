@@ -46,6 +46,9 @@ EVENT_FIELDS = {
         "http_status",
     },
     "route_selected": {"action", "reason", "arguments", "arguments_sha256"},
+    "route_proposed": {"action", "reason"},
+    "route_guard": {"reason"},
+    "answer_guard": {"reason"},
     "route_rejected": {"reason"},
     "tool_started": {"action", "attempt", "retry_count"},
     "tool_completed": {

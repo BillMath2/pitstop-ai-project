@@ -53,7 +53,23 @@ incomplete. Ordinary traces omit credentials, questions, answer prose, and
 rejected restricted IDs. Administrator reports contain more and require review.
 Only actual provider-reported usage is recorded.
 
+Validated model choices emit `route_proposed` with only fixed action/reason
+labels. A deterministic override emits `route_guard` before the final
+`route_selected` event. This distinguishes a model clarification from a guard
+rejection without storing raw router prose or policy query text. The new events
+are additive to trace v1; the current inspector also reads the original traces.
+
 Limits: one tool call, two model calls, zero retries, six graph steps, 65 seconds,
 four policies, and up to five recall campaigns. Conservative guards can reject
-valid questions, and fixed abstentions can omit useful guidance. Valid citations
-do not prove complete or correct prose. See [M7's retained failures](m7-results.md).
+valid questions. Negated-inference caveats no longer automatically negate a
+vehicle selection; actual negations and alternatives remain blocked. A narrow
+routing-only normalizer separates terminal repair-completion follow-ups; the full
+question still drives argument guards and answer composition. Policy generation
+selects sentence indices from authorized canonical sources, which code expands
+and validates before rendering. Abstentions discard free-form model prose and
+retain verified quotations and explicit coordinator contact instructions. A fixed
+human-handoff suggestion does not confer approval or access. Explicit private-term
+requests from technicians trigger a conservative abstention and `answer_guard`
+event after permission-scoped search. Valid citations prove source membership, not
+complete or correct prose, including referrals. See [M7's original failures](m7-results.md)
+and [the subsequent quality repairs](m7-quality-fixes.md).

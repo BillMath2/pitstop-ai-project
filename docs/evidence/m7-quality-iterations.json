@@ -1,0 +1,465 @@
+{
+  "evaluation_kind": "development_iterations_on_exposed_cases_not_fresh_holdout",
+  "selection_rule": "All attempts retained; final results use m7-v13, not the best earlier score.",
+  "original_m7_evidence_unchanged": true,
+  "attempts": [
+    {
+      "directory": "runs/m7-quality-20260928T205229330476Z",
+      "report_sha256": "a6584a694eea30c88c3ee89cfa17da922212f64da081d49786627d6dfdee498c",
+      "prompt_version": "m7-v3",
+      "source_split": "held_out",
+      "automatic_passes": 1,
+      "case_count": 24,
+      "usage": {},
+      "elapsed_seconds": 5.76500000001397,
+      "failed_case_ids": [
+        "held_001",
+        "held_002",
+        "held_003",
+        "held_004",
+        "held_005",
+        "held_006",
+        "held_007",
+        "held_008",
+        "held_009",
+        "held_010",
+        "held_011",
+        "held_012",
+        "held_013",
+        "held_014",
+        "held_015",
+        "held_016",
+        "held_017",
+        "held_018",
+        "held_019",
+        "held_020",
+        "held_021",
+        "held_022",
+        "held_023"
+      ],
+      "provider_successful_calls": 0,
+      "provider_failure_types": [
+        "APIConnectionError"
+      ],
+      "source_sha256": "461803c9e30828524609d9da45d8921e515de1abc44af7afb1c0fea2c25ad0e4"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T205301522473Z",
+      "report_sha256": "25893ce8d8e38929e78705b5bcb9642d8e62f2e6e0266b598be5965c4c747125",
+      "prompt_version": "m7-v3",
+      "source_split": "held_out",
+      "automatic_passes": 22,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 35958,
+        "completion_tokens": 2547,
+        "total_tokens": 38505
+      },
+      "elapsed_seconds": 53.18699999997625,
+      "failed_case_ids": [
+        "held_014",
+        "held_019"
+      ],
+      "provider_successful_calls": 41,
+      "provider_failure_types": [],
+      "source_sha256": "461803c9e30828524609d9da45d8921e515de1abc44af7afb1c0fea2c25ad0e4"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T205501559201Z",
+      "report_sha256": "df4fe4c829c64a133f077e2fc8a596a456235dd0f0f6a5d8b5796d5a78bd8c61",
+      "prompt_version": "m7-v4",
+      "source_split": "held_out",
+      "automatic_passes": 24,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 46949,
+        "completion_tokens": 3074,
+        "total_tokens": 50023
+      },
+      "elapsed_seconds": 54.78200000000652,
+      "failed_case_ids": [],
+      "provider_successful_calls": 43,
+      "provider_failure_types": [],
+      "source_sha256": "431b227a89593d6493e3ca0320d29b71724d31ccbc045f776b11cb2dd7965f30"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T205626579530Z",
+      "report_sha256": "673d55cf09d237a35586187a5011ad3d5d003099b8177a3304a1a5fdb58c7bff",
+      "prompt_version": "m7-v4",
+      "source_split": "development",
+      "automatic_passes": 15,
+      "case_count": 16,
+      "usage": {
+        "prompt_tokens": 28533,
+        "completion_tokens": 1751,
+        "total_tokens": 30284
+      },
+      "elapsed_seconds": 31.73399999999674,
+      "failed_case_ids": [
+        "dev_013"
+      ],
+      "provider_successful_calls": 26,
+      "provider_failure_types": [],
+      "source_sha256": "431b227a89593d6493e3ca0320d29b71724d31ccbc045f776b11cb2dd7965f30"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T205935801193Z",
+      "report_sha256": "b3d7e5d03ab7dabb6cbcb1e3f6ce7cf4d91edf5c8f9f5d440d18ba68d88585dd",
+      "prompt_version": "m7-v5",
+      "source_split": "held_out",
+      "automatic_passes": 20,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 50586,
+        "completion_tokens": 5169,
+        "total_tokens": 55755
+      },
+      "elapsed_seconds": 62.29699999996228,
+      "failed_case_ids": [
+        "held_013",
+        "held_016",
+        "held_019",
+        "held_020"
+      ],
+      "provider_successful_calls": 42,
+      "provider_failure_types": [],
+      "source_sha256": "9d1e73a8e3796f57ce0378658d67ab98443202b59508684b9c744eb9284b90ea"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T210049615173Z",
+      "report_sha256": "d628d3b138a12cd86999ec52039f671eff725887309272191f8c1ba2822eeed8",
+      "prompt_version": "m7-v5",
+      "source_split": "development",
+      "automatic_passes": 14,
+      "case_count": 16,
+      "usage": {
+        "prompt_tokens": 31470,
+        "completion_tokens": 3349,
+        "total_tokens": 34819
+      },
+      "elapsed_seconds": 40.81300000002375,
+      "failed_case_ids": [
+        "dev_011",
+        "dev_013"
+      ],
+      "provider_successful_calls": 26,
+      "provider_failure_types": [],
+      "source_sha256": "9d1e73a8e3796f57ce0378658d67ab98443202b59508684b9c744eb9284b90ea"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T210350570812Z",
+      "report_sha256": "8aa325c5c0d0ef58ada3e922ec770bb1995f396c7ac5cc3edd6d2c790d958429",
+      "prompt_version": "m7-v6",
+      "source_split": "held_out",
+      "automatic_passes": 21,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 47076,
+        "completion_tokens": 7040,
+        "total_tokens": 54116
+      },
+      "elapsed_seconds": 78.45300000003772,
+      "failed_case_ids": [
+        "held_005",
+        "held_009",
+        "held_010"
+      ],
+      "provider_successful_calls": 43,
+      "provider_failure_types": [],
+      "source_sha256": "e68fb18a9aa4d961ea04383110c890946ebf09831bba723b066253f4d299a2be"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T210405023129Z",
+      "report_sha256": "a07d89ab9c6dcf1a287fc30427f5d3fba52a1c30ac0b3cb90b7a6b64a8808992",
+      "prompt_version": "m7-v6",
+      "source_split": "development",
+      "automatic_passes": 16,
+      "case_count": 16,
+      "usage": {
+        "prompt_tokens": 30120,
+        "completion_tokens": 3472,
+        "total_tokens": 33592
+      },
+      "elapsed_seconds": 41.79599999997299,
+      "failed_case_ids": [],
+      "provider_successful_calls": 27,
+      "provider_failure_types": [],
+      "source_sha256": "e68fb18a9aa4d961ea04383110c890946ebf09831bba723b066253f4d299a2be"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T210709446837Z",
+      "report_sha256": "21ac8b36c65db3f07c371098a916e5b7ce5f61bef804d96e3fb3e72daa368197",
+      "prompt_version": "m7-v7",
+      "source_split": "held_out",
+      "automatic_passes": 21,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 57295,
+        "completion_tokens": 5430,
+        "total_tokens": 62725
+      },
+      "elapsed_seconds": 64.39100000000326,
+      "failed_case_ids": [
+        "held_007",
+        "held_014",
+        "held_017"
+      ],
+      "provider_successful_calls": 43,
+      "provider_failure_types": [],
+      "source_sha256": "913fd4d65df151d98d864de016822fa183c8ae7579f1e8b138ccde6f19a2b568"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T210723174582Z",
+      "report_sha256": "bb5299910a59f53d07d66cb62468e3cb329b83b12bc87dd00d61b33f74fa25cf",
+      "prompt_version": "m7-v7",
+      "source_split": "development",
+      "automatic_passes": 16,
+      "case_count": 16,
+      "usage": {
+        "prompt_tokens": 35006,
+        "completion_tokens": 2866,
+        "total_tokens": 37872
+      },
+      "elapsed_seconds": 39.25,
+      "failed_case_ids": [],
+      "provider_successful_calls": 27,
+      "provider_failure_types": [],
+      "source_sha256": "913fd4d65df151d98d864de016822fa183c8ae7579f1e8b138ccde6f19a2b568"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T211051580043Z",
+      "report_sha256": "22a1de283fc6977ce8dc46d8ef41f12b7b1b0287c13bef1ea8e1e42dc34f14f5",
+      "prompt_version": "m7-v8",
+      "source_split": "held_out",
+      "automatic_passes": 23,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 63825,
+        "completion_tokens": 5241,
+        "total_tokens": 69066
+      },
+      "elapsed_seconds": 61.07800000003772,
+      "failed_case_ids": [
+        "held_004"
+      ],
+      "provider_successful_calls": 43,
+      "provider_failure_types": [],
+      "source_sha256": "d233356232c0c526e728789750c5b556208ce688f05c86c232074d7ae41ea6cb"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T211104585424Z",
+      "report_sha256": "3423ea59ca69ce56a803cb446040fbd57b6784ff8bc886780d924f5663686455",
+      "prompt_version": "m7-v8",
+      "source_split": "development",
+      "automatic_passes": 15,
+      "case_count": 16,
+      "usage": {
+        "prompt_tokens": 38227,
+        "completion_tokens": 2910,
+        "total_tokens": 41137
+      },
+      "elapsed_seconds": 36.90600000001723,
+      "failed_case_ids": [
+        "dev_002"
+      ],
+      "provider_successful_calls": 27,
+      "provider_failure_types": [],
+      "source_sha256": "d233356232c0c526e728789750c5b556208ce688f05c86c232074d7ae41ea6cb"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T211355065338Z",
+      "report_sha256": "0db2d4701a0ee6f317001a7f2e5393442cff6a15de9d4c2dd5472f841ae51546",
+      "prompt_version": "m7-v9",
+      "source_split": "held_out",
+      "automatic_passes": 23,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 63851,
+        "completion_tokens": 5366,
+        "total_tokens": 69217
+      },
+      "elapsed_seconds": 63.21900000004098,
+      "failed_case_ids": [
+        "held_013"
+      ],
+      "provider_successful_calls": 43,
+      "provider_failure_types": [],
+      "source_sha256": "86f06c9f2f28f536fea1116e7883075025d8cef5a7f1b69306244cf3f694edbb"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T211410246531Z",
+      "report_sha256": "6d1ac4b0590665931c205fbaa5d36356f7e5c585b67969377c64da48ed1c48ae",
+      "prompt_version": "m7-v9",
+      "source_split": "development",
+      "automatic_passes": 16,
+      "case_count": 16,
+      "usage": {
+        "prompt_tokens": 38204,
+        "completion_tokens": 2728,
+        "total_tokens": 40932
+      },
+      "elapsed_seconds": 35.85899999999674,
+      "failed_case_ids": [],
+      "provider_successful_calls": 27,
+      "provider_failure_types": [],
+      "source_sha256": "86f06c9f2f28f536fea1116e7883075025d8cef5a7f1b69306244cf3f694edbb"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T211802758318Z",
+      "report_sha256": "fb008b44d3c205c56c39f7255099471f3a5267572fe68385dc987a6d272c47b5",
+      "prompt_version": "m7-v10",
+      "source_split": "held_out",
+      "automatic_passes": 24,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 63851,
+        "completion_tokens": 5590,
+        "total_tokens": 69441
+      },
+      "elapsed_seconds": 67.95299999997951,
+      "failed_case_ids": [],
+      "provider_successful_calls": 43,
+      "provider_failure_types": [],
+      "source_sha256": "d769cc1c384937d865c02d692851f386d92adfdb8281b38c509ace2a376d7626"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T211815136240Z",
+      "report_sha256": "5e7587189f55e98c030631c273a6d07c703454b0b6ba14b5ea8e9237d25c2bf2",
+      "prompt_version": "m7-v10",
+      "source_split": "development",
+      "automatic_passes": 16,
+      "case_count": 16,
+      "usage": {
+        "prompt_tokens": 38227,
+        "completion_tokens": 2791,
+        "total_tokens": 41018
+      },
+      "elapsed_seconds": 37.14000000001397,
+      "failed_case_ids": [],
+      "provider_successful_calls": 27,
+      "provider_failure_types": [],
+      "source_sha256": "d769cc1c384937d865c02d692851f386d92adfdb8281b38c509ace2a376d7626"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T212135666771Z",
+      "report_sha256": "2f535f465e77277b4ffa185bac2437a85dcca44e5806344025dad34eeb065bde",
+      "prompt_version": "m7-v11",
+      "source_split": "held_out",
+      "automatic_passes": 24,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 63792,
+        "completion_tokens": 5626,
+        "total_tokens": 69418
+      },
+      "elapsed_seconds": 69.53099999995902,
+      "failed_case_ids": [],
+      "provider_successful_calls": 43,
+      "provider_failure_types": [],
+      "source_sha256": "10f4451cb40d38689a7c0e2c0616a70cdafd852dbccfc75a58e5e42c3190210f"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T212149561361Z",
+      "report_sha256": "9909e99d6f67d16944f0ee5b0edcefe1df85fd7eaba63dcea680154f37b6ea0d",
+      "prompt_version": "m7-v11",
+      "source_split": "development",
+      "automatic_passes": 15,
+      "case_count": 16,
+      "usage": {
+        "prompt_tokens": 36546,
+        "completion_tokens": 2564,
+        "total_tokens": 39110
+      },
+      "elapsed_seconds": 35.5,
+      "failed_case_ids": [
+        "dev_013"
+      ],
+      "provider_successful_calls": 26,
+      "provider_failure_types": [],
+      "source_sha256": "10f4451cb40d38689a7c0e2c0616a70cdafd852dbccfc75a58e5e42c3190210f"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T212824452871Z",
+      "report_sha256": "d4912e2eec0f16bea1ee9eaf0f8ed9fc69060f15afbf14fd2bdf0fdd85c7b30c",
+      "prompt_version": "m7-v12",
+      "source_split": "held_out",
+      "automatic_passes": 24,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 63807,
+        "completion_tokens": 5501,
+        "total_tokens": 69308
+      },
+      "elapsed_seconds": 66.46899999998277,
+      "failed_case_ids": [],
+      "provider_successful_calls": 43,
+      "provider_failure_types": [],
+      "source_sha256": "5e6b6bd015151dc3cf642d5dc17b20015ed3fc569f45c09612f506f7a0747e67"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T212836906347Z",
+      "report_sha256": "d8f8b1ccd9982f483ea2d4de2235347a95bbc7c46af021553d825fe67fa4f07b",
+      "prompt_version": "m7-v12",
+      "source_split": "development",
+      "automatic_passes": 16,
+      "case_count": 16,
+      "usage": {
+        "prompt_tokens": 38181,
+        "completion_tokens": 2796,
+        "total_tokens": 40977
+      },
+      "elapsed_seconds": 37.53099999995902,
+      "failed_case_ids": [],
+      "provider_successful_calls": 27,
+      "provider_failure_types": [],
+      "source_sha256": "5e6b6bd015151dc3cf642d5dc17b20015ed3fc569f45c09612f506f7a0747e67"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T213103765316Z",
+      "report_sha256": "ce331c5a9560503ab7be26b7d40b6db5ec7e82803e77bbae8d9853a7d84b456d",
+      "prompt_version": "m7-v13",
+      "source_split": "held_out",
+      "automatic_passes": 24,
+      "case_count": 24,
+      "usage": {
+        "prompt_tokens": 65660,
+        "completion_tokens": 4353,
+        "total_tokens": 70013
+      },
+      "elapsed_seconds": 61.57799999997951,
+      "failed_case_ids": [],
+      "provider_successful_calls": 43,
+      "provider_failure_types": [],
+      "source_sha256": "83e7c9949d3199b47bfd8b92bfb916e90467c46f0bfca055ac9298c765962da8"
+    },
+    {
+      "directory": "runs/m7-quality-20260928T213116418541Z",
+      "report_sha256": "12198573898ff1d35bd8626a15de31ec84af95a50a975747846f827fb4f98609",
+      "prompt_version": "m7-v13",
+      "source_split": "development",
+      "automatic_passes": 16,
+      "case_count": 16,
+      "usage": {
+        "prompt_tokens": 39162,
+        "completion_tokens": 2382,
+        "total_tokens": 41544
+      },
+      "elapsed_seconds": 35.43699999997625,
+      "failed_case_ids": [],
+      "provider_successful_calls": 27,
+      "provider_failure_types": [],
+      "source_sha256": "83e7c9949d3199b47bfd8b92bfb916e90467c46f0bfca055ac9298c765962da8"
+    }
+  ],
+  "qualitative_observations": [
+    {
+      "prompt_version": "m7-v12",
+      "split": "development",
+      "failed_cases": {
+        "dev_004": "Unsupported paraphrase granting coordinator exception-approval authority.",
+        "dev_009": "Irrelevant warranty-coordinator referral for hourly labor rate."
+      },
+      "review_scope": "Observed semantic failures, not a complete grading of every intermediate attempt."
+    }
+  ]
+}

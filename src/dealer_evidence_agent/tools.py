@@ -13,6 +13,27 @@ from dealer_evidence_agent.retrieval import PolicyHit, SearchError, validate_sea
 MAX_EVIDENCE_CHARS = 40_000
 
 
+def routing_question(question: str) -> str:
+    """Separate a narrow recall-scope follow-up from the tool-selection question.
+
+    Only a complete, terminal repair-completion question is removed. The full
+    question still drives ambiguity guards and answer composition. No vehicle
+    fields are extracted or supplied here, and unrecognized wording is retained.
+    """
+    if not re.search(r"\brecalls?\b", question, re.I) or mixed_request(question):
+        return question
+    return re.sub(
+        r"(?:,?\s+and\s+|[.;?]\s*)"
+        r"(?:tell me (?:if|whether) (?:that|this|it) (?:proves|establishes|confirms)"
+        r"|does (?:that|this|it) (?:prove|establish|confirm))"
+        r"\s+(?:that\s+)?(?:my|the)\s+repairs?\s+"
+        r"(?:was|were|has been|have been)\s+completed[.?]?\s*$",
+        "",
+        question,
+        flags=re.I,
+    )
+
+
 def validate_arguments(name: str, arguments: dict) -> dict:
     if name == "search_policies" and set(arguments) == {"query"}:
         try:
@@ -34,7 +55,15 @@ def vehicle_is_explicit(question: str, arguments: dict) -> bool:
     years = re.findall(r"(?<!\w)(?:19|20|21)\d{2}(?!\w)", normalized)
     if set(years) != {str(arguments["year"])}:
         return False
-    if re.search(r"\b(or|either|versus|vs|maybe|possibly|not|instead)\b", normalized):
+    # A negated inference is a scope caveat, not a negated vehicle selection.
+    # Remove only that negation token, retaining the rest of the question so
+    # alternatives (including ones following the caveat) still fail closed.
+    selection_text = re.sub(
+        r"\b(do|does|should|must) not (?=(?:infer|assume|conclude|prove|establish|mean)\b)",
+        r"\1 ",
+        normalized,
+    )
+    if re.search(r"\b(or|either|versus|vs|maybe|possibly|not|instead)\b", selection_text):
         return False
     if re.search(r"\band\b(?!\s+(?:tell me|explain|does that|whether)\b)", normalized):
         return False
@@ -56,6 +85,22 @@ def mixed_request(question: str) -> bool:
         )
         and re.search(
             r"\b(policy|policies|loaner|goodwill|discount|shuttle|refund|appointment)\b",
+            question,
+            re.I,
+        )
+    )
+
+
+def restricted_policy_request(question: str, identity: str) -> bool:
+    """Conservative abstention for explicitly requested private policy terms.
+
+    Query text can narrow an answer, never grant a different role. This does not
+    infer that a restricted policy exists or expose any restricted metadata.
+    """
+    return resolve_role(identity) == "technician" and bool(
+        re.search(r"\b(?:private|confidential|manager[-_ ]only)\b", question, re.I)
+        and re.search(
+            r"\b(?:limits?|deadlines?|caps?|thresholds?|procedures?|terms|rules|rates?)\b",
             question,
             re.I,
         )

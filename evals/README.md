@@ -8,6 +8,17 @@ not change this frozen split or provide final agent-answer quality scores.
 
 ## Split discipline
 
+**September 28, 2026 update:** The original `held_out.jsonl` was opened for M7
+and is now an **exposed regression set** used to repair known failures. Its
+filename, questions, labels, and hashes are retained for historical comparison;
+they no longer imply an untouched holdout. The explicit
+`scripts/m7_quality_regression.py --live --env-file .env` runner labels these
+runs as regression, never fresh held-out quality. New unit tests cover exposed
+failure patterns without reading that file. A new untouched set is still needed
+for release-quality validation. See [the repair record](../docs/m7-quality-fixes.md).
+
+Original split:
+
 - `development.jsonl`: 16 cases for M2 retrieval and later prompt development.
 - `held_out.jsonl`: 24 cases reserved for final evaluation after decisions freeze.
 - `manifest.json`: schema version, corpus fingerprint, split paths/counts/hashes.

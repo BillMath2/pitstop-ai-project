@@ -1,5 +1,11 @@
 # M7: first held-out evaluation and release review
 
+**Historical baseline:** This document preserves the first September 27 result.
+Subsequent changes and exposed-case regression results are recorded separately in
+[M7 quality fixes](m7-quality-fixes.md). The original M7 artifacts were committed
+as `562c924`; references below to uncommitted work describe the original capture
+time. They are not the current working-tree status.
+
 **Evaluation is complete; the quality gates are not met.** The first frozen pass
 scored 20/24 on mechanical graph checks and 14/24 under strict qualitative
 review. Retrieval and evidence isolation passed. This is a constrained

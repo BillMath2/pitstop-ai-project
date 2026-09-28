@@ -14,6 +14,8 @@ Only newly authored application material belongs in the eventual public repo:
 - Reviewed regression patch and reproduction record under `docs/`; never a broken production tree.
 - Labeled synthetic model replies under `evals/model_replies/`; never presented as model quality.
 - Reviewed M7 reports, freezes, qualitative grading, and scoped audit under `docs/evidence/`.
+- Separately labeled exposed-case quality regression reports and iteration summaries;
+  these do not replace the original held-out evaluation.
 - The offline `docs/demo.html` replay and instructions; not a completed video.
 
 Never include `.env`, credentials, local runtimes, virtual environments,

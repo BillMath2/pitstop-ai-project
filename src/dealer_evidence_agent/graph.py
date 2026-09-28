@@ -8,13 +8,22 @@ from typing import TypedDict
 
 from langgraph.graph import END, START, StateGraph
 
-from dealer_evidence_agent.answers import AgentError, Answer, Evidence, parse_json, validate_answer
+from dealer_evidence_agent.answers import (
+    INSUFFICIENT_MESSAGE,
+    AgentError,
+    Answer,
+    Evidence,
+    parse_json,
+    validate_answer,
+)
 from dealer_evidence_agent.corpus import PolicyDocument, corpus_fingerprint
 from dealer_evidence_agent.model_client import ModelClient
 from dealer_evidence_agent.permissions import AuthorizationError, resolve_role
 from dealer_evidence_agent.prompts import (
     ANSWER_PROMPT,
     ANSWER_SCHEMA,
+    RECALL_ANSWER_PROMPT,
+    RECALL_ANSWER_SCHEMA,
     ROUTE_PROMPT,
     ROUTE_SCHEMA,
     response_format,
@@ -25,6 +34,8 @@ from dealer_evidence_agent.tools import (
     mixed_request,
     policy_evidence,
     recall_evidence,
+    restricted_policy_request,
+    routing_question,
     validate_arguments,
     vehicle_is_explicit,
 )
@@ -114,7 +125,10 @@ def run_agent(
             {
                 "messages": [
                     {"role": "system", "content": ROUTE_PROMPT},
-                    {"role": "user", "content": json.dumps({"question": question})},
+                    {
+                        "role": "user",
+                        "content": json.dumps({"question": routing_question(question)}),
+                    },
                 ],
                 "response_format": response_format("route", ROUTE_SCHEMA),
             },
@@ -132,9 +146,12 @@ def run_agent(
             ):
                 reject("invalid_tool_decision")
             arguments = validate_arguments(action, decision["arguments"])
+            trace.emit("route_proposed", action=action)
             if mixed_request(question):
+                trace.emit("route_guard", reason="mixed_request")
                 return terminal("needs_clarification", "mixed_request")
             if action == "lookup_recalls" and not vehicle_is_explicit(question, arguments):
+                trace.emit("route_guard", reason="vehicle_not_explicit")
                 return terminal("needs_clarification", "missing_vehicle")
             # Policy query text is deliberately not logged: it can echo raw user text.
             trace.emit(
@@ -147,11 +164,15 @@ def run_agent(
         if set(decision) != {"action", "reason"}:
             reject("invalid_terminal_decision")
         reason = decision["reason"]
+        if reason == "policy_and_recall":
+            reason = "mixed_request"
         if not isinstance(reason, str) or reason not in TERMINALS:
             reject("invalid_terminal_reason")
         if action == "unsupported" and reason == "out_of_scope":
+            trace.emit("route_proposed", action=action, reason=reason)
             return terminal(action, reason)
         if action == "needs_clarification" and reason != "out_of_scope":
+            trace.emit("route_proposed", action=action, reason=reason)
             return terminal(action, reason)
         reject("invalid_terminal_action")
 
@@ -231,11 +252,15 @@ def run_agent(
         return {"evidence": evidence, "recall_note": note}
 
     def compose(state: AgentState) -> AgentState:
+        is_recall = state["action"] == "lookup_recalls"
         message = complete(
             "answer",
             {
                 "messages": [
-                    {"role": "system", "content": ANSWER_PROMPT},
+                    {
+                        "role": "system",
+                        "content": RECALL_ANSWER_PROMPT if is_recall else ANSWER_PROMPT,
+                    },
                     {
                         "role": "user",
                         "content": json.dumps(
@@ -247,12 +272,17 @@ def run_agent(
                         ),
                     },
                 ],
-                "response_format": response_format("answer", ANSWER_SCHEMA),
+                "response_format": response_format(
+                    "answer", RECALL_ANSWER_SCHEMA if is_recall else ANSWER_SCHEMA
+                ),
             },
         )
         if message.get("tool_calls"):
             raise AgentError("invalid_answer")
         answer = validate_answer(parse_json(message.get("content")), state["evidence"])
+        if not is_recall and restricted_policy_request(question, identity):
+            trace.emit("answer_guard", reason="restricted_policy_scope")
+            answer = Answer("insufficient_evidence", INSUFFICIENT_MESSAGE)
         if state.get("recall_note"):
             answer = Answer(
                 answer.status, answer.text + "\n\n" + state["recall_note"], answer.citations
